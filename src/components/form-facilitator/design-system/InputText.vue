@@ -1,13 +1,13 @@
 <template>
-  <mom-input-text v-if="show" v-bind="$attrs" :input-state="fieldState.inputState" :value="value" @input="onInput" @blur="onBlur" />
+  <mom-input-text v-if="show" v-bind="$attrs" :input-state="fieldInputState.inputState" :value="fieldState" @input="onInput" @blur="onBlur" />
 </template>
 
 <script setup lang="ts">
-import { inject, computed, onMounted, onBeforeMount } from 'vue'
+import { inject, onMounted, onBeforeMount } from 'vue'
 import type { StoreDefinition } from 'pinia'
-import { get as objGet, set as objSet } from 'lodash'
 import { useValidate } from './composable/useValidation'
- 
+import { useState } from './composable/useState'
+import {useShow}from './composable/useShow'
 
 const store = (inject('store') as StoreDefinition)()
 const fieldId = inject('fieldId') as string
@@ -27,31 +27,8 @@ const props = defineProps({
   }
 })
 
-const fieldState = computed({
-  get: () => { 
-    return objGet(store._inputState, fieldId)
-  },
-  set: ({ inputState, errorMsg }) => {
-    const s = objGet(store._inputState, fieldId)
-    s.inputState = inputState
-    s.errorMsg = errorMsg
-  },
-})
-
-const value = computed(() => objGet(store, fieldId))
-
-const validate = async () => {
-  if (schema?.validation?.rules) {
-    const { type, keyword } = await useValidate({ schema, options, dependency, value, state: store })
-     
-    const message: String = getMessage(keyword) 
-    fieldState.value = { errorMsg: message, inputState : type }
-  }
-}
-
-const show = computed(() => {
-  return schema.show ? schema.show({ state: store, dependency: dependency }) : true
-})
+const { fieldInputState, fieldState } = useState(store, fieldId) 
+const { show } = useShow({store, dependency, schema})
 
 onMounted(() => {
   onLoad({ validate }, fieldId)
@@ -64,9 +41,19 @@ onMounted(() => {
 onBeforeMount(() => {
   onDestroy(fieldId)
 })
+ 
+const validate = async () => {
+  if (schema?.validation?.rules) {
+    const { type, keyword } = await useValidate({ schema, options, dependency, value: fieldState.value, state: store })
+     
+    const message: String = getMessage(keyword) 
+    fieldInputState.value = { errorMsg: message, inputState : type }
+  }
+} 
 
-const onInput =  (value: string) => {
-  objSet(store, fieldId, value)
+const onInput =  (value: string) => { 
+  fieldState.value = value
+  emit('input', value)
   
 }
 

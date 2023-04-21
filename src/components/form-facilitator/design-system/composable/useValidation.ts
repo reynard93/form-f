@@ -1,19 +1,7 @@
 import type { ComputedRef } from "vue"
-enum errorType {
-    error = "error",
-    warning = "warning"
-}
+import type { Store, StateTree } from 'pinia'
 
-interface Schema {
-    validation: {
-        rules: {
-            [key: string]: {
-                fn: Function
-                runMode: String
-            }
-        }
-    }
-}
+
 
 interface ValidationReturnType{
     valid : Boolean,
@@ -23,7 +11,7 @@ interface ValidationReturnType{
 
 interface UseValidateProps {
     schema: Schema,
-    state: Object,
+    state: Store<string, StateTree>,
     options: Object,
     dependency: Object,
     value: ComputedRef<any>

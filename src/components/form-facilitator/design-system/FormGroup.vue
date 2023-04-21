@@ -1,5 +1,5 @@
 <template>
-  <mom-form-group v-bind="$attrs" :input-state="state.inputState" :message-text="state.errorMsg">
+  <mom-form-group v-bind="$attrs" :input-state="fieldInputState.inputState" :message-text="fieldInputState.errorMsg">
     <slot></slot>
   </mom-form-group>
 </template>
@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { inject, provide } from 'vue'
 import type { StoreDefinition } from 'pinia'
-import { get as objGet } from 'lodash'
+import { useState } from './composable/useState'
 
 const props = defineProps({
   fieldId: {
@@ -15,8 +15,9 @@ const props = defineProps({
     default: ''
   }
 })
-const store = inject('store') as StoreDefinition
-const state = objGet(store()._inputState, props.fieldId) 
+const store = (inject('store') as StoreDefinition)()
+const { fieldInputState } = useState(store, props.fieldId)
+
 
 const validate = () => {}
 
