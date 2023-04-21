@@ -31,14 +31,19 @@ const props = defineProps({
 
 
 const childNodes = new Map<String, NodeRef>();
-const validateAll = () => {}
+
+const validateAll = () => {
+  for (let [key, nodeRef] of childNodes) {
+    nodeRef.validate(true)
+  }
+}
 
 provide('store', props.store)
 provide('getSchema', (id: string) => {
   return objGet(props.schema, id)
 })
 provide('getMessage', (key: string) => {
-  // return objGet(this.messages, key)
+  return objGet(props.messages, key)
 })
 provide('dependency', props.dependency)
 
@@ -48,7 +53,7 @@ provide('onLoad', (nodeRef: NodeRef, fieldId: string) => {
 })
 
 provide('onDestroy', (fieldId: string) => {
-  //  delete this.childNodes[fieldId]
+  childNodes.delete(fieldId)
 })
 
 defineExpose({

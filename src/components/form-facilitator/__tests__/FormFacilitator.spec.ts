@@ -47,12 +47,12 @@ describe('FormFacilitator', () => {
 
     const MessageComponent = {
       template: `<form-facilitor ref="form" :store="store" :schema="schema">
-                  <form-group field-id="name"></form-group>  
+                  <form-group field-id="name"><input-text /></form-group>  
                 </form-facilitor>`,
       data() {
         return {
           store: store,
-          schema: { count: { defaultValue: 1 } }
+          schema: { name: { defaultValue: 1, show() { } } }
         }
       }
     }
@@ -67,7 +67,7 @@ describe('FormFacilitator', () => {
     wrapper.vm.store()._inputState.name.errorMsg = ""
 
     await nextTick()
-  
+    
     expect(wrapper.text()).not.toContain("something is wrong")
 
   })
@@ -86,7 +86,7 @@ describe('FormFacilitator', () => {
       data() {
         return {
           store: store,
-          schema: { count: { defaultValue: 1 } }
+          schema: { name: { defaultValue: 1, show() { return true } } }
         }
       }
     }
@@ -129,13 +129,18 @@ describe('FormFacilitator', () => {
             store: store,
             schema: {
               name: {
-                defaultValue: 1, validation: {
+                defaultValue: 1,
+                show() { },
+                validation: {
                   rules: {
                     mandatory: {
-                      function: () => {return false},
-                      runMode: ['onValidateAll']
+                      fn: () => {return false},
+                      runMode: 'onValidateAll'
                     },
-                    validCheck: (value) => value
+                    validCheck: {
+                      fn: () => { return false },
+                      runMode: ''
+                    }
                   }
                 }
               }
