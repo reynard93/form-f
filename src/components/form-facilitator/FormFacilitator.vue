@@ -1,16 +1,25 @@
-<template>
-  <slot></slot>
+<template >
+  <slot name="form-facilitator"></slot>
 </template>
 
 <script setup lang="ts">
-import { provide, defineExpose, type PropType } from 'vue'
+import { provide, defineExpose, type PropType, inject, type ComputedRef, useSlots, onMounted, ref, type VNode } from 'vue'
 import type { StoreDefinition } from 'pinia'
 import { get as objGet } from 'lodash'
+import type { InputState } from './types/input-state'
 
-interface NodeRef{
-  validate:Function
+
+const form = ref(null);
+
+interface NodeRef {
+  validate: () => Promise<InputState>
+  show: ComputedRef<Boolean>
 }
 
+interface FormFacilitorExpose {
+  validateAll: Function
+}
+  
 const props = defineProps({
   schema: {
     type: Object
@@ -29,34 +38,56 @@ const props = defineProps({
   }
 })
 
+const validateChildComponents = null;
 
-const childNodes = new Map<String, NodeRef>();
+onMounted(() => {
+ 
+ 
+})
+ 
 
-const validateAll = () => {
-  for (let [key, nodeRef] of childNodes) {
-    nodeRef.validate(true)
+const childNodes = new Map<String, NodeRef>()
+ 
+const validateAll = async (validateChildForm = true) => {
+  const validationRes: Array<Promise<InputState>> = new Array()
+  for (let [_, nodeRef] of childNodes) {
+    if (!nodeRef.show) continue
+
+    validationRes.push(nodeRef.validate())
+  }
+
+  const isValidated = (await Promise.all(validationRes)).some(fieldState => fieldState.inputState !== 'error')
+  
+  
+
+  // return parentFormFacilitatorInstance && !validateChildForm ? await parentFormFacilitatorInstance.validateAll() && isValidated : isValidated
+}
+
+const validateField = (fieldId: string, setInputState: Boolean = false) => {
+  const node = childNodes.get(fieldId)
+  if (node) {
+    return node.validate()
   }
 }
 
+
 provide('store', props.store)
-provide('getSchema', (id: string) => {
-  return objGet(props.schema, id)
-})
-provide('getMessage', (key: string) => {
-  return objGet(props.messages, key)
-})
 provide('dependency', props.dependency)
-
-provide('onLoad', (nodeRef: NodeRef, fieldId: string) => {
-  return childNodes.set(fieldId, nodeRef)
-
+provide('getSchema', (id: string) => objGet(props.schema, id))
+provide('getMessage', (key: string) => objGet(props.messages, key))
+provide('onDestroy', (fieldId: string) => childNodes.delete(fieldId))
+provide('onLoad', (nodeRef: NodeRef, fieldId: string) => childNodes.set(fieldId, nodeRef))
+provide('formfacilitator', {
+  validateAll
 })
-
-provide('onDestroy', (fieldId: string) => {
-  childNodes.delete(fieldId)
+provide('childForms',
+  {
+    bind: () => { },
+    unbind: () => { }
 })
 
 defineExpose({
-  validateAll
+  validateAll,
+  validateField 
 })
 </script>

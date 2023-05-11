@@ -1,11 +1,27 @@
 interface Schema {
-    show: Function,
+  [key: String]: {
+    defaultValue: any,
+    show: Function
     validation: {
-        rules: {
-            [key: string]: {
-                fn: Function
-                runMode: String
-            }
+      rules: {
+        [key: string]: {
+          fn: Function
+          runMode: String
         }
+      }
     }
+  }
+}
+
+interface FieldSchema {
+  defaultValue: any,
+  show: Function
+  validation: {
+    rules: {
+      [key: string]: {
+        fn: Function
+        runMode: String
+      }
+    }
+  }
 }

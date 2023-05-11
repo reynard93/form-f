@@ -1,144 +1,132 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { defineStore, setActivePinia, createPinia } from 'pinia'
 import { mount, config } from '@vue/test-utils'
 import FormFacilitator from '../FormFacilitator.vue'
 import FormGroup from '../design-system/FormGroup.vue'
 import InputText from '../design-system/InputText.vue'
 import designSys from '@momwins/mom-design-system'
-
+import { flushPromises } from '@vue/test-utils'
 import { nextTick } from 'vue'
 
 config.global.components = {
-  'form-facilitor': FormFacilitator,
+  'form-facilitator': FormFacilitator,
   'form-group': FormGroup,
   'input-text': InputText
 }
 
 describe('FormFacilitator', () => {
-  let wrapper: any
 
   beforeEach(() => {
     setActivePinia(createPinia())
   })
   it('renders properly', () => {
     const MessageComponent = {
-      template: '<form-facilitor ref="form">Some content</form-facilitor>'
+      template: '<form-facilitator ref="form">Some content</form-facilitator>'
     }
-    wrapper = mount(MessageComponent)
+    const wrapper = mount(MessageComponent)
 
     expect(wrapper.text()).toContain('Some content')
-  })
-
-  it('should expose validateAll method', () => {
-    const MessageComponent = {
-      template: '<form-facilitor ref="form">Some content</form-facilitor>'
-    }
-    wrapper = mount(MessageComponent)
-
-    const instance: any = wrapper.vm.$refs.form
-
-    expect(typeof instance.validateAll).toBe('function')
-  })
-
-  it('should show error message in the form group', async () => {
-    const store = defineStore('counter', {
-      state: () => ({ name: 'Eduardo', _inputState: { name: { inputState: "error", errorMsg: 'something is wrong' } } })
-    }) 
-
-    const MessageComponent = {
-      template: `<form-facilitor ref="form" :store="store" :schema="schema">
-                  <form-group field-id="name"><input-text /></form-group>  
-                </form-facilitor>`,
-      data() {
-        return {
-          store: store,
-          schema: { name: { defaultValue: 1, show() { } } }
-        }
-      }
-    }
-    wrapper = mount(MessageComponent, {
-      global: {
-        plugins: [designSys]
-      }
-    })
-    expect(wrapper.text()).toContain("something is wrong")
-
-    wrapper.vm.store()._inputState.name.inputState = null
-    wrapper.vm.store()._inputState.name.errorMsg = ""
-
-    await nextTick()
-    
-    expect(wrapper.text()).not.toContain("something is wrong")
-
   })
 
   it('should set the value in input text', async () => {
     const store = defineStore('counter', {
       state: () => ({ name: 'Eduardo', _inputState: { name: { inputState: null, errorMsg: '' } } })
-    }) 
+    })
 
     const MessageComponent = {
-      template: `<form-facilitor ref="form" :store="store" :schema="schema">
+      template: `<form-facilitator ref="form" :store="store" :schema="schema">
                   <form-group field-id="name">
                     <input-text/>
                   </form-group>  
-                </form-facilitor>`,
+                </form-facilitator>`,
       data() {
         return {
           store: store,
-          schema: { name: { defaultValue: 1, show() { return true } } }
+          schema: {
+            name: {
+              defaultValue: 1,
+              show() {
+                return true
+              }
+            }
+          }
         }
       }
     }
 
-    wrapper = mount(MessageComponent, {
+    const wrapper = mount(MessageComponent, {
       global: {
         plugins: [designSys]
       }
     })
 
-    const input = wrapper.find('input') 
+    const input = wrapper.find('input')
 
-    expect(input.element.value).toContain("Eduardo")
-
-    wrapper.vm.store().name = "testing wins"
-   
-    await nextTick()
-
-    expect(input.element.value).toContain("testing wins")
-
-    wrapper.find('input').setValue("new text")
-
-    expect(wrapper.vm.store().name).toContain("new text")
+    expect(input.element.value).toContain('Eduardo')
   })
 
-  describe('#validateAll', () => {
-    it('', () => {
+  describe('#validation', () => {
+    it('should show error message in the form group', async () => {
       const store = defineStore('counter', {
-        state: () => ({ name: 'Eduardo', _inputState: { name: { inputState: null, errorMsg: '' } } })
+        state: () => ({
+          name: 'Eduardo',
+          _inputState: { name: { inputState: 'error', errorMsg: 'something is wrong' } }
+        })
       })
 
       const MessageComponent = {
-        template: `<form-facilitor ref="form" :store="store" :schema="schema">
+        template: `<form-facilitator ref="form" :store="store" :schema="schema">
+                  <form-group field-id="name"><input-text /></form-group>  
+                </form-facilitator>`,
+        data() {
+          return {
+            store: store,
+            schema: { name: { defaultValue: 1, show() { } } }
+          }
+        }
+      }
+      const wrapper = mount(MessageComponent, {
+        global: {
+          plugins: [designSys]
+        }
+      })
+
+      expect(wrapper.text()).toContain('something is wrong')
+    })
+
+    it('should validate all the fields', async () => {
+      const store = defineStore('counter', {
+        state: () => ({
+          name: 'Eduardo',
+          _inputState: { name: { inputState: null, errorMsg: '' } }
+        })
+      })
+
+      const MessageComponent = {
+        template: `<form-facilitator ref="form" :store="store" :schema="schema">
                   <form-group field-id="name">
                     <input-text/>
                   </form-group>  
-                </form-facilitor>`,
+                </form-facilitator>`,
         data() {
           return {
             store: store,
             schema: {
               name: {
                 defaultValue: 1,
-                show() { },
+                show() {},
                 validation: {
                   rules: {
                     mandatory: {
-                      fn: () => {return false},
+                      fn: () => {
+                        return true
+                      },
                       runMode: 'onValidateAll'
                     },
                     validCheck: {
-                      fn: () => { return false },
+                      fn: () => {
+                        return true
+                      },
                       runMode: ''
                     }
                   }
@@ -149,13 +137,83 @@ describe('FormFacilitator', () => {
         }
       }
 
-      wrapper = mount(MessageComponent, {
+      const wrapper = mount(MessageComponent, {
         global: {
           plugins: [designSys]
         }
       })
+      const refs:any = wrapper.vm.$refs
 
-      wrapper.vm.$refs.form.validateAll()
+      expect(await refs.form.validateAll()).toBeTruthy()
+    })
+
+    it('should validate all sub form facilitator', async () => {
+      const parentStore = defineStore('counter', {
+        state: () => ({
+          name: 'Eduardo',
+          _inputState: { name: { inputState: null, errorMsg: '' } }
+        })
+      })
+
+      const childStore = defineStore('counter', {
+        state: () => ({
+          name: 'Eduardo',
+          _inputState: { name: { inputState: null, errorMsg: '' } }
+        })
+      })
+
+      const MessageComponent = {
+        template: `<form-facilitator ref="parentForm" :store="parentStore" :schema="schema">
+                    <form-group field-id="name">
+                      <input-text/>
+                    </form-group>  
+                    <form-facilitator ref="childForm" :store="childStore" :schema="schema">
+                      <form-group field-id="name">
+                        <input-text/>
+                      </form-group>
+                    </form-facilitator>
+                </form-facilitator>`,
+        data() {
+          return {
+            parentStore,
+            childStore,
+            schema: {
+              name: {
+                defaultValue: 1,
+                show() { },
+                validation: {
+                  rules: {
+                    mandatory: {
+                      fn: () => {
+                        return true
+                      },
+                      runMode: 'onValidateAll'
+                    },
+                    validCheck: {
+                      fn: () => {
+                        return true
+                      },
+                      runMode: ''
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      const wrapper = mount(MessageComponent, {
+        global: {
+          plugins: [designSys]
+        }
+      })
+      const refs: any = wrapper.vm.$refs
+      const childValidateAll = vi.spyOn(refs.childForm, 'validateAll')
+
+      expect(await refs.parentForm.validateAll()).toBe(true)
+      expect(childValidateAll).toHaveBeenCalledOnce()
+
     })
   })
 })

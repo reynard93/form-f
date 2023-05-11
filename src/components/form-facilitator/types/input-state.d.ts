@@ -1,4 +1,4 @@
-interface InputState {
-  inputState: String | null,
+export interface InputState {
+  inputState: String | null
   errorMsg: String
 }

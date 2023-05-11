@@ -1,5 +1,9 @@
 <template>
-  <mom-form-group v-bind="$attrs" :input-state="fieldInputState.inputState" :message-text="fieldInputState.errorMsg">
+  <mom-form-group
+    v-bind="$attrs"
+    :input-state="fieldInputState.inputState"
+    :message-text="fieldInputState.errorMsg"
+  >
     <slot></slot>
   </mom-form-group>
 </template>
@@ -16,14 +20,14 @@ const props = defineProps({
   }
 })
 const store = (inject('store') as StoreDefinition)()
-const { fieldInputState } = useState(store, props.fieldId)
-
+const { fieldInputState } = useState({ store, fieldId: props.fieldId })
 
 const validate = () => {}
 
-defineExpose({
-    validate
-})
 provide('fieldId', props.fieldId)
 provide('options', {})
+
+defineExpose({
+  validate
+})
 </script>
