@@ -8,7 +8,14 @@ interface props {
     value: FieldValue,
     dependency: Object
 }
-export default async ({ fieldSchema, value, state, dependency, options }: props, runAllRules = false) => {
+
+interface ValidationResponse{
+    valid: Boolean,
+    type: string,
+    keyword: string
+}
+
+export default async ({ fieldSchema, value, state, dependency, options }: props, runAllRules = false): Promise<ValidationResponse> => {
     const DEFAULT_TYPE = 'error'
     const validationRules = fieldSchema.validation.rules
 

@@ -10,28 +10,26 @@ interface UseFormFaciliatorProps {
     dependency: Object,
     message?: Object
 }
+ 
 
 export function useFormFaciliator({ store, schema, dependency }: UseFormFaciliatorProps) {
 
-    const validateAll = async (key: string) => {
-        const value = objGet(store, key)
-        const fieldSchema = objGet(schema, key) as FieldSchema;
-        const state = store.$state
+    const validateAll = async () => {
+        // const value = objGet(store, key)
+        // const fieldSchema = objGet(schema, key) as FieldSchema;
+        // const state = store.$state
 
-        return validationRunner({ fieldSchema, state, value, options: {}, dependency }, true)
+        // return validationRunner({ fieldSchema, state, value, options: {}, dependency }, true)
     }
 
-    const validate = async (key: string) => {
-        const value = objGet(store, key)
-        const fieldSchema = objGet(schema, key) as FieldSchema;
-        const state = store.$state
-
-        return validationRunner({fieldSchema, state, value, options:{}, dependency})
-    }
 
     const onBlur = (key: string) => {
         return async () => {
-            const { type, keyword } = await validate(key)
+            const value = objGet(store, key) as FieldValue
+            const fieldSchema = objGet(schema, key) as FieldSchema;
+            const state = store.$state
+
+            const { type, keyword } = await validationRunner({ fieldSchema, state, value, options: {}, dependency })
             
             fieldState(key).value = { errorMsg: "message", inputState: type }
         }
@@ -48,7 +46,7 @@ export function useFormFaciliator({ store, schema, dependency }: UseFormFaciliat
     const vModel = (key: string): WritableComputedRef<any> => {
         return computed({
             get: () => {
-                return objGet(store, key)
+                return objGet(store, key) as FieldValue
             },
             set: (value) => {
                 objSet(store, key, value)
@@ -56,18 +54,18 @@ export function useFormFaciliator({ store, schema, dependency }: UseFormFaciliat
         })
     }
 
-    const fieldState = (key: string): WritableComputedRef<any> => {
+    const fieldState = (key: string): WritableComputedRef<InputState> => {
         return reactive(computed({
             get: () => {
-                return objGet(store._inputState, key)
+                return objGet(store._inputState, key) as InputState
             },
             set: ({ inputState, errorMsg }) => {
-                const s = objGet(store._inputState, key)
+                const s = objGet(store._inputState, key) as InputState
                 s.inputState = inputState
                 s.errorMsg = errorMsg
             }
         }))
     }
     
-    return { validateAll, validate, show, onBlur, vModel, fieldState }
+    return { validateAll, show, onBlur, vModel, fieldState }
 }
