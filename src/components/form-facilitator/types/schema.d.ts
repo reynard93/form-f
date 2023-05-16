@@ -1,17 +1,5 @@
+type RunMode = 'onValidateAll'
 
-/**
- * defaultValue: any,
-    show: Function
-    options: Function?,
-    validation: {
-      rules: {
-        [key: string]: {
-          fn: Function
-          runMode: String
-        }
-      }
-    }
- */
 interface FieldSchema {
   defaultValue: any,
   show: Function
@@ -20,7 +8,7 @@ interface FieldSchema {
     rules: {
       [key: string]: {
         fn: Function
-        runMode: String
+        runMode: RunMode
       }
     }
   }

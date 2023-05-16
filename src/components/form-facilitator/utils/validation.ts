@@ -19,8 +19,7 @@ export default async ({ fieldSchema, value, state, dependency, options }: props,
     const DEFAULT_TYPE = 'error'
     const validationRules = fieldSchema.validation.rules
 
-    for (const validationName in validationRules) {
-        const validation = validationRules[validationName]
+    for (const [validationName, validation] of Object.entries(validationRules)) {
 
         if (!runAllRules && validation.runMode === 'onValidateAll') {
             continue
