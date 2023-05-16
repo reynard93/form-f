@@ -1,12 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { useFormFaciliator } from '../form'
-import { mount, config } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import designSys from '@momwins/mom-design-system'
 import { defineStore, setActivePinia, createPinia } from 'pinia'
 import { flushPromises } from '@vue/test-utils'
-
-import { get as objGet, set as objSet } from 'lodash'
-import { reactive } from 'vue'
 
 describe('#FormComposable', () => {
     beforeEach(() => {
@@ -17,10 +14,10 @@ describe('#FormComposable', () => {
         const getTestingComponent = () => {
             const component = {
                 template: `<mom-input-text ref="input" 
-                    v-model="nameFieldAttr.vmodel"
-                    v-if="nameFieldAttr.show"
-                    @blur="nameFieldAttr.blur"
-                    :input-state="nameFieldAttr.fieldState.inputState"
+                    v-model="getAttribute('name').vmodel"
+                    v-if="getAttribute('name').show"
+                    @blur="getAttribute('name').blur"
+                    v-bind="getAttribute('name').common"
                 />`,
                 setup() {
                     const store = defineStore('counter', {
@@ -51,16 +48,15 @@ describe('#FormComposable', () => {
                         }
                     }
 
-                    const { vModel, show, onBlur, fieldState } = useFormFaciliator({ store, schema, dependency: {} })
+                    const messages = {
+                        name: {
+                            mandatory : 'Name cant be error'
+                        }
+                    }
 
-                    const nameFieldAttr = reactive({
-                        vmodel: vModel('name'),
-                        show: show('name'),
-                        blur: onBlur('name'),
-                        fieldState: fieldState('name')
-                    })
+                    const { getAttribute } = useFormFaciliator({ store, schema, dependency: {}, messages })
 
-                    return { store, nameFieldAttr }
+                    return { store, getAttribute }
                 }
             }
 
@@ -106,7 +102,70 @@ describe('#FormComposable', () => {
 
             await flushPromises()
 
-            expect(wrapper.vm.store._inputState).toEqual({ name: { inputState: 'error', errorMsg: 'message' } })
+            expect(wrapper.vm.store._inputState).toEqual({ name: { inputState: 'error', errorMsg: 'Name cant be error' } })
         })
     }) 
+
+    describe('#InputSelect', () => {
+        const getTestingComponent = () => {
+            const component = {
+                template: `<mom-input-select ref="input"  v-if="getAttribute('name').show"
+                                :options="getAttribute('name').options"
+                            />`,
+                setup() {
+                    const store = defineStore('counter', {
+                        state: () => ({ name: 'Eduardo', _inputState: { name: { inputState: null, errorMsg: '' } } })
+                    })()
+
+                    const schema = {
+                        name: {
+                            defaultValue: 1,
+                            show({ state }: any) {
+                                return true
+                            },
+                            options: [{
+                                label: "eaDeclaration",
+                                value: "AGREED"
+                            }],
+                            validation: {
+                                rules: {
+                                    mandatory: {
+                                        fn: (value: string) => {
+                                            return value
+                                        }
+                                    },
+                                    validCheck: {
+                                        fn: () => {
+                                            return true
+                                        },
+                                        runMode: ''
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    const messages = {
+                        name: {
+                            mandatory: 'Name cant be error'
+                        }
+                    }
+
+                    const { getAttribute } = useFormFaciliator({ store, schema, dependency: {}, messages })
+                    console.log(getAttribute('name').options)
+                    return { store, getAttribute }
+                }
+            }
+
+            return mount(component, {
+                global: {
+                    plugins: [designSys]
+                }
+            })
+        }
+
+        it('should display dropdown from schema', async () => {
+            const wrapper = getTestingComponent()
+        })
+    })
 })

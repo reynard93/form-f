@@ -1,71 +1,118 @@
 import type { Store, StateTree } from 'pinia'
 import {  get as objGet, set as objSet } from 'lodash'
-import { reactive, computed, type WritableComputedRef, type ComputedRef } from 'vue'
+import { ref, reactive, computed, type WritableComputedRef, type ComputedRef, onMounted } from 'vue'
 import validationRunner from '../utils/validation'
 
-
+interface Messages {
+    [fieldId: string]: {
+        [keyword: string]: string
+    }
+}
 interface UseFormFaciliatorProps {
     schema: Schema
     store: Store<string, StateTree>
     dependency: Object,
-    message?: Object
+    messages: Object
 }
  
 
-export function useFormFaciliator({ store, schema, dependency }: UseFormFaciliatorProps) {
+export function useFormFaciliator({ store, schema, dependency, messages }: UseFormFaciliatorProps) {
+    const state = store.$state
+    const options = ref([])
 
-    const validateAll = async () => {
-        // const value = objGet(store, key)
-        // const fieldSchema = objGet(schema, key) as FieldSchema;
-        // const state = store.$state
 
-        // return validationRunner({ fieldSchema, state, value, options: {}, dependency }, true)
+    onMounted(() => {
+
+    })
+
+    
+    const validateAll = async () => {}
+
+    const getMessages = (keyword: string, fieldId: string): string => {
+
+        const message = objGet(messages, fieldId + '.' + keyword)
+
+        if (!message) {
+            const isExistGlobal = objGet(messages, keyword)
+            if (!isExistGlobal) {
+                console.error("Cant find the keyword", keyword)
+                return "";
+            }
+
+            return isExistGlobal
+        }
+
+        return message
     }
 
 
-    const onBlur = (key: string) => {
+    const onBlur = (fieldId: string) => {
         return async () => {
-            const value = objGet(store, key) as FieldValue
-            const fieldSchema = objGet(schema, key) as FieldSchema;
-            const state = store.$state
-
+            const value = objGet(store, fieldId) as FieldValue
+            const fieldSchema = objGet(schema, fieldId) as FieldSchema; 
+            
             const { type, keyword } = await validationRunner({ fieldSchema, state, value, options: {}, dependency })
             
-            fieldState(key).value = { errorMsg: "message", inputState: type }
+            fieldState(fieldId).value = { errorMsg: getMessages(keyword, fieldId), inputState: type }
         }
     }
 
-    const show = (key: string): ComputedRef<Boolean> => {
-        const fieldSchema = objGet(schema, key) as FieldSchema;
+    const show = (fieldId: string): ComputedRef<Boolean> => {
+        const fieldSchema = objGet(schema, fieldId) as FieldSchema;
 
         return computed(() => {
-            return fieldSchema.show({ state: store, dependency })
+            const isShow = fieldSchema.show({ state, dependency })
+            
+            if (isShow) {
+                getOptions(fieldId)    
+            }
+            return isShow
         })
     }
 
-    const vModel = (key: string): WritableComputedRef<any> => {
+    const vModel = (fieldId: string): WritableComputedRef<any> => {
         return computed({
             get: () => {
-                return objGet(store, key) as FieldValue
+                return objGet(state, fieldId) as FieldValue
             },
             set: (value) => {
-                objSet(store, key, value)
+                objSet(state, fieldId, value)
             }
         })
     }
 
-    const fieldState = (key: string): WritableComputedRef<InputState> => {
+    const fieldState = (fieldId: string): WritableComputedRef<InputState> => {
         return reactive(computed({
             get: () => {
-                return objGet(store._inputState, key) as InputState
+                return objGet(state._inputState, fieldId) as InputState
             },
             set: ({ inputState, errorMsg }) => {
-                const s = objGet(store._inputState, key) as InputState
+                const s = objGet(state._inputState, fieldId) as InputState
                 s.inputState = inputState
                 s.errorMsg = errorMsg
             }
         }))
     }
+
+    const getOptions = async (fieldId: string): Promise<void> =>  {
+        const fieldSchema = objGet(schema, fieldId) as FieldSchema;
+
+        options.value = typeof fieldSchema.options == 'function' ? await fieldSchema.options({ state, dependency }) : fieldSchema.options     
+    }
+
+    const getAttribute = (fieldId: string) => {
+        return reactive({
+            vmodel: vModel(fieldId),
+            show: show(fieldId),
+            blur: onBlur(fieldId),
+            fieldState: fieldState(fieldId),
+            options: options,
+            common: {
+                ...fieldState(fieldId),
+            }
+        })
+    }
     
-    return { validateAll, show, onBlur, vModel, fieldState }
+    
+    return { validateAll, getAttribute }
 }

@@ -1,7 +1,8 @@
-interface Schema {
-  [key: String]: {
-    defaultValue: any,
+
+/**
+ * defaultValue: any,
     show: Function
+    options: Function?,
     validation: {
       rules: {
         [key: string]: {
@@ -10,17 +11,32 @@ interface Schema {
         }
       }
     }
-  }
-}
-
+ */
 interface FieldSchema {
   defaultValue: any,
   show: Function
+  options: Function?,
   validation: {
     rules: {
       [key: string]: {
         fn: Function
         runMode: String
+      }
+    }
+  }
+}
+
+interface Schema {
+  [key: String]: {
+    defaultValue: any,
+    show: Function
+    options: Function?,
+    validation: {
+      rules: {
+        [key: string]: {
+          fn: Function
+          runMode: String
+        }
       }
     }
   }
