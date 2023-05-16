@@ -1,14 +1,18 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue","src/**/*.ts", "src/**/*.json", "src/**/*.css", "vite.config.*", "jest.config.*", "./jest-setup.ts"],
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
     },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
-    }
-  ]
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "useUnknownInCatchVariables": false,
+    "noUncheckedIndexedAccess": true, 
+    "types": ["node", "jsdom", "jest", "vite/client"],
+    "importsNotUsedAsValues": "remove",
+    "preserveValueImports": false
+  }
 }

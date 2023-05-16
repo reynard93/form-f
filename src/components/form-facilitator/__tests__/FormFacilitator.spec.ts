@@ -5,8 +5,6 @@ import FormFacilitator from '../FormFacilitator.vue'
 import FormGroup from '../design-system/FormGroup.vue'
 import InputText from '../design-system/InputText.vue'
 import designSys from '@momwins/mom-design-system'
-import { flushPromises } from '@vue/test-utils'
-import { nextTick } from 'vue'
 
 config.global.components = {
   'form-facilitator': FormFacilitator,

@@ -27,17 +27,5 @@ interface FieldSchema {
 }
 
 interface Schema {
-  [key: String]: {
-    defaultValue: any,
-    show: Function
-    options: Function?,
-    validation: {
-      rules: {
-        [key: string]: {
-          fn: Function
-          runMode: String
-        }
-      }
-    }
-  }
+  [key: String]: FieldSchema
 }
