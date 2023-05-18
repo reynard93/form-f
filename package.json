@@ -2,6 +2,18 @@
   "name": "wins-common-form-component-v3",
   "version": "0.0.0",
   "private": true,
+  "main": "./dist/system.umd.js",
+  "module": "./dist/system.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/system.es.js",
+      "require": "./dist/system.umd.js"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
@@ -9,7 +21,7 @@
     "test": "jest",
     "test:dev": "jest --watch-all --coverage false",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "type-check": "vue-tsc --noEmit --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },

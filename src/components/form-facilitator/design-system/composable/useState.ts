@@ -1,7 +1,7 @@
 import { get as objGet, set as objSet } from 'lodash'
 import { computed, type WritableComputedRef } from 'vue'
 import type { Store, StateTree } from 'pinia'
-import type { InputState } from '../../types/input-state'
+import type { InputState } from "../../types/input-state"
 
 interface UseStateProps {
   store: Store<string, StateTree>

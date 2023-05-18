@@ -1,5 +1,6 @@
 
-import type { Store, StateTree, StoreDefinition } from 'pinia'
+import type { StateTree } from 'pinia'
+import { type FieldSchema } from '../types/schema'
 
 interface props {
     fieldSchema: FieldSchema

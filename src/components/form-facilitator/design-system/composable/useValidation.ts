@@ -1,6 +1,7 @@
 import type { ComputedRef } from 'vue'
 import type { Store, StateTree } from 'pinia'
 import type { StateValue } from './useState'
+import { type FieldSchema } from '../../types/schema'
 
 interface UseValidationReturn {
   valid: Boolean
@@ -9,7 +10,7 @@ interface UseValidationReturn {
 }
 
 interface UseValidateProps {
-  schema: Schema
+  schema: FieldSchema
   state: Store<string, StateTree>
   options: Object
   dependency: Object
@@ -21,10 +22,13 @@ export const useValidate = async (
   runAllRules = false
 ): Promise<UseValidationReturn> => {
   const DEFAULT_TYPE = 'error'
+  
   const validationRules = schema.validation.rules
 
   for (const validationName in validationRules) {
     const validation = validationRules[validationName]
+
+    if (!validation) continue 
 
     if (!runAllRules && validation.runMode === 'onValidateAll') {
       continue

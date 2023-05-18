@@ -1,9 +1,9 @@
 import { computed, type ComputedRef } from 'vue'
-
+import { type FieldSchema } from '../../types/schema'
 import type { Store, StateTree } from 'pinia'
 
 interface UseShowProps {
-  schema: Schema
+  schema: FieldSchema
   store: Store<string, StateTree>
   dependency: Object
 }
