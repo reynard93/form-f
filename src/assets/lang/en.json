@@ -1,0 +1,117 @@
+{
+  "testComponent": {
+    "text": "This is a sample text"
+  },
+  "common": {
+    "error": {
+      "no_file_error": "You must upload the document.",
+      "empty_error": "You must answer this question."
+    },
+    "countdown_second_label": "second.",
+    "countdown_seconds_label": "seconds.",
+    "countdown_title_label": "Your session is about to expire",
+    "countdown_description_label": "For your security, you will be logged out by the system in ",
+    "countdown_logout_button": "Log out",
+    "countdown_continue_button": "Keep me logged in"
+  },
+  "toast_errors": {
+    "offline": {
+      "title": "Sorry, the system encountered a problem",
+      "message": "You seem to be offline. Check your internet connection and try again."
+    },
+    "general_error": {
+      "title": "Sorry, the system encountered a problem",
+      "message": "Please try again later."
+    }
+  }, 
+  "errors": {
+    "empty_file_error": "You must upload a valid document.",
+    "empty_upload_error": "You must upload all documents to proceed.",
+    "network_error": "Your document failed to upload as there was a network error.",
+    "submission_error": "Your declaration failed to submit as there was a network error.",
+    "invalid_file_type_error": "You must upload a document in an acceptable file format.",
+    "limit_file_size_error": "Your document failed to upload as the file size exceeded 2MB.",
+    "limit_file_size_5MB_error": "Your document failed to upload as the file size exceeded 5MB.",
+    "duplicate_file_error": "Your document failed to upload as another document has the same name.",
+    "pdf_error": "Your document failed to upload as the file is corrupted.",
+    "pdf_encrypted_error": "Your document failed to upload as the file is password protected.",
+    "invalid_file_error": "You must upload a valid document.",
+    "invalid_file_name_special_char_error": "Your document failed to upload as the file name contains special characters, such as ‘;:&gt;&lt;/\\*%$&’.",
+    "invalid_file_name_length_error": "You must upload a file with a name that does not exceed 100 characters."
+  },
+  "uploader": {
+    "upload_view_guide_button": "View upload guide"
+  },
+  "payment": {
+    "payment_methods_label": "Payment method",
+    "payment_details_label": "Payment details",
+    "payment_modes_label": "Payment modes",
+    "payment_methods": {
+      "visa_mastercard": "Visa/Mastercard/Amex",
+      "giro": "GIRO"
+    },
+    "payment_mode": {
+      "credit_card": "Credit Card"
+    },
+    "payment_date_label": "Payment date",
+    "pay_label": "Proceed to pay",
+    "card_holder_name_label": "Name on card",
+    "card_number_label": "Card number",
+    "card_expiration_date_label": "Card expiry",
+    "security_code_label": "Security code",
+    "error": {
+      "try_other_card": "Your payment request could not be processed. Please try with another card.",
+      "invalid_card_type": "You must enter a valid Visa, Mastercard or Amex card number.",
+      "invalid_card": "Please check your card details and try again.",
+      "retry_30_min": "Your payment request could not be processed. Please try again in 30 minutes.",
+      "not_3ds_supported": "Your payment request could not be processed. Please use another payment method or try again in 15 minutes.",
+      "invalid_cvv": "Transaction declined: invalid CVV number. Please try again with the correct CVV number or use a different payment method.",
+      "checkout_fail": "Something went wrong. Payment could not be made. Please retrieve your draft and try again after 30 minutes."
+    }
+  },
+  "declaration": {
+    "ea": "I declare that I have obtained written authorisation from the employer and/or foreigner to perform this transaction, and that the employer and/or foreigner has/have consented in writing to pre-fill and display their data (including personal data) in this form."
+  },
+  "links": {
+    "my_mom_portal": "<em>myMOM</em> Portal",
+    "quick_links": "Quick Menu",
+    "officer_dashboard": "Officer Dashboard",
+    "work_passes": "Work Passes",
+    "go_to_my_mom_portal": "Go to <em>myMOM</em> Portal",
+    "go_to_quick_links": "Go to Quick Menu",
+    "go_to_officer_dashboard": "Go to Officer Dashboard",
+    "mom_information_instruction": "For more information, please visit MOM website",
+    "go_to_organisation_profile": "Manage organisation profile",
+    "go_to_payment_details": "View payment records"
+  },
+  "notification": {
+    "input": {
+      "notification_email_label": "Email",
+      "notification_header": "Notification",
+      "notification_message": "We will notify you of the _ outcome or if we need more documents. The email address you provide must belong to a user authorised to transact for your organisation.",
+      "notification_message_withdrawal_form": "We will send you notifications relating to this transaction through email. The email address you provide must belong to a user authorised to transact for your organisation."
+    },
+    "uam": {
+      "notification_header": "Notification email",
+      "notification_message": "Updating this email address will affect notifications sent for all transactions.",
+      "notification_label": "We will send all notifications to",
+      "modal": {
+        "link_text": "Update email",
+        "title": "You are about to update your email",
+        "body_1": "You will be redirected from this page. This form has been saved and you may retrieve it from ",
+        "body_italic": "My Drafts",
+        "body_2": " after updating and verifying your email.",
+        "body_no_draft": "You will be redirected from this page and your information will be lost. Do you wish to continue?",
+        "body_short": "You will be redirected from this page.",
+        "cancel": "Cancel",
+        "continue": "Continue"
+      },
+      "updated_email_modal": {
+        "title": "You have updated your email",
+        "body_1": "We will send all notifications to ",
+        "body_2": "Please review the details before submitting this transaction.",
+        "continue": "Continue"
+      }
+    }
+  }
+}
