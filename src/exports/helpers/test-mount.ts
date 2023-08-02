@@ -1,9 +1,9 @@
-import { mount } from '@vue/test-utils'
 import designSystem from '../../design-system'
 import { VNode } from 'vue'
+import { render } from '@testing-library/vue'
 
 const TestMountHelper = (component: VNode<any>) =>
-  mount(component, {
+  render(component, {
     global: {
       plugins: [designSystem],
       mocks: {
