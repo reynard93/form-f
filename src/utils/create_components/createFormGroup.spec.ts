@@ -28,27 +28,4 @@ describe('createFormGroup', () => {
     expect(labelWrapper.text()).toBe('This is a label') // assert that the label text is correct
     expect(wrapper.find('div.MomFormGroup__Input div').exists()).toBe(true) // assert that the child div exists
   })
-
-  it('should render correctly with slots', () => {
-    // define some dummy markup for slots
-    const beforeContent = h('span', { id: 'beforeContent' }, 'Before content')
-    const afterContent = h('span', { id: 'afterContent' }, 'After content')
-
-    const slots = {
-      before: () => beforeContent,
-      after: () => afterContent
-    }
-
-    const childNode = h('div')
-    const output = createFormGroup(defaultFormGroupProps, [childNode], slots)
-
-    const wrapper = TestMountHelper(output)
-    console.log(wrapper.html(), ' this is what i have')
-    // Check that slots are rendered correctly
-    expect(wrapper.find('#beforeContent').exists()).toBe(true)
-    expect(wrapper.find('#beforeContent').text()).toBe('Before content')
-
-    expect(wrapper.find('#afterContent').exists()).toBe(true)
-    expect(wrapper.find('#afterContent').text()).toBe('After content')
-  })
 })

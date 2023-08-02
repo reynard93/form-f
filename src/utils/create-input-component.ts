@@ -151,16 +151,17 @@ const createInputComponent = (componentName: string, componentOptions: Component
             })
           ]
 
-          return createFormGroup(
+          // slots should be wrapped around here
+          const formGroup = createFormGroup(
             {
               fieldId: props.fieldId,
               inputState: errorState?.errorState,
               messageText: errorState?.errorMsg,
               size: props?.size
             },
-            children,
-            slots
+            children
           )
+          return [slots.before?.(), formGroup, slots.after?.()]
         }
       }
     }
