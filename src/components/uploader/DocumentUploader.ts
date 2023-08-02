@@ -67,6 +67,15 @@ const DocumentUploader = () => {
       validateOnSubmit: {
         type: Boolean as PropType<InputComponentProps['validateOnSubmit']>,
         default: false
+      },
+      label: {
+        type: String,
+        default: ''
+      },
+      messageText: {
+        // TODO: turn into messageTextInternal
+        type: String,
+        default: ''
       }
     },
     setup() {

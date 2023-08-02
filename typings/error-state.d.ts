@@ -1,6 +1,6 @@
 export {}
 
 export interface ErrorState {
-  errorState: string | null
+  errorState: 'error' | 'warning' | 'disabled' | null
   errorMsg: string
 }

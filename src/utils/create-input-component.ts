@@ -4,10 +4,10 @@ import { components } from '@momwins/mom-design-system-v3'
 import { ErrorState } from '../../typings/error-state'
 import kebabToPascalCase from '../utils/kebab-to-pascal-case'
 import { FieldTargetWatchFunction } from '../composable/useFormFieldWatch'
-import { extendFunction } from '../utils/extend-function'
+import { extendFunction } from './extend-function'
 import useFormStore from '../composable/useFormStore'
 import { DynamicListeners, Listener } from '../../typings/listener'
-import { createFormGroup } from '../utils/create_components/createFormGroup'
+import { createFormGroup } from './create_components/createFormGroup'
 
 interface ComponentOptions {
   newProps?: Record<string, any>
@@ -19,6 +19,7 @@ interface ComponentOptions {
 // helps to differentiate between FormGroup and InputComponent props
 export interface FormGroupProps {
   fieldId: string
+  label?: string
   size?: 'xs' | 'xs1' | 's' | 'm' | 'l' | 'xl' | 'full' | 'fit'
   inputState: ErrorState['errorState']
   messageText: ErrorState['errorMsg']
