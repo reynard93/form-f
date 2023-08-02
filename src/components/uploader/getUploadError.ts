@@ -1,4 +1,4 @@
-import CONSTANT from '@/constants/errors/uploader'
+import CONSTANT from '../../constants/errors/uploader'
 
 type ErrorType =
   | 'file_size_limit'

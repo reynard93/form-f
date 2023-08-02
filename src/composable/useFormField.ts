@@ -5,7 +5,7 @@ import { getSchema } from './useFormField/schema'
 import { getOptions } from './useFormField/options'
 import { validateValue } from './useFormField/validation'
 import { ReactiveVariable } from 'vue/macros'
-import { DynamicListeners } from '@typings/listener'
+import { DynamicListeners } from '../../typings/listener'
 import { isObjTruthy } from '../utils/object-utils'
 
 export interface ListAttributes {

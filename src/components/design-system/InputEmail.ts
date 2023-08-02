@@ -1,4 +1,4 @@
-import createInputComponent from '@utils/create-input-component'
+import createInputComponent from '../../utils/create-input-component'
 
 const InputEmail = createInputComponent('mom-input-email', { validateOn: ['onBlur'] })
 

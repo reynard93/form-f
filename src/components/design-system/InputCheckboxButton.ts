@@ -1,4 +1,4 @@
-import createInputComponent from '@utils/create-input-component'
+import createInputComponent from '../../utils/create-input-component'
 import { WritableComputedRefValue } from 'vue/macros'
 
 const InputCheckboxButton = createInputComponent('mom-input-checkbox-button', {

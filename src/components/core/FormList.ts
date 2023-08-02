@@ -10,8 +10,8 @@ import {
   watch
 } from 'vue'
 import { components } from '@momwins/mom-design-system-v3'
-import { getSchema } from '@composable/useFormField/schema'
-import useFormStore from '@composable/useFormStore'
+import { getSchema } from '../../composable/useFormField/schema'
+import useFormStore from '../../composable/useFormStore'
 
 const { MomLink } = components
 type ArrayWithLastElementNull<T> = [T, ...T[], null] // T in front is to make sure tuple always contain 1 elem before null
@@ -84,7 +84,7 @@ const FormList = defineComponent({
           type: 'button',
           onClick: () => remove(index)
         },
-          () => removeLabel
+        () => removeLabel
       )
     }
     watch(
@@ -124,7 +124,7 @@ const FormList = defineComponent({
           type: 'button',
           onClick: add
         },
-          () => addLabel
+        () => addLabel
       )
 
       return [...listState.formSectionNodes, addLinkVNode]

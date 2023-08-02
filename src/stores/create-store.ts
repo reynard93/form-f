@@ -1,4 +1,4 @@
-import { StoreProps } from '@typings/store'
+import { StoreProps } from '../../typings/store'
 import { MissingStorePropsError } from '../utils/store-props-error'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'

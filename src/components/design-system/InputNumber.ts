@@ -1,4 +1,4 @@
-import createInputComponent from '@utils/create-input-component'
+import createInputComponent from '../../utils/create-input-component'
 
 const InputNumber = createInputComponent('mom-input-number', { validateOn: ['onBlur'] })
 

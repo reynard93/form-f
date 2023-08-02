@@ -1,13 +1,13 @@
 import { defineComponent, h, inject, unref, PropType } from 'vue'
-import { ListAttributes, useFormField } from '@composable/useFormField'
+import { ListAttributes, useFormField } from '../composable/useFormField'
 import { components } from '@momwins/mom-design-system-v3'
-import { ErrorState } from '@typings/error-state'
-import kebabToPascalCase from '@utils/kebab-to-pascal-case'
-import { FieldTargetWatchFunction } from '@composable/useFormFieldWatch'
-import { extendFunction } from '@utils/extend-function'
-import useFormStore from '@composable/useFormStore'
-import { DynamicListeners, Listener } from '@typings/listener'
-import { createFormGroup } from '@utils/create_components/createFormGroup'
+import { ErrorState } from '../../typings/error-state'
+import kebabToPascalCase from '../utils/kebab-to-pascal-case'
+import { FieldTargetWatchFunction } from '../composable/useFormFieldWatch'
+import { extendFunction } from '../utils/extend-function'
+import useFormStore from '../composable/useFormStore'
+import { DynamicListeners, Listener } from '../../typings/listener'
+import { createFormGroup } from '../utils/create_components/createFormGroup'
 
 interface ComponentOptions {
   newProps?: Record<string, any>
@@ -26,7 +26,7 @@ export interface FormGroupProps {
 
 type OmittedFormProps = 'inputState' | 'messageText' | 'size'
 
-interface InputComponentProps extends Omit<FormGroupProps, OmittedFormProps> {
+export interface InputComponentProps extends Omit<FormGroupProps, OmittedFormProps> {
   index: number
   validateOnLoad: boolean
   validateOnSubmit: boolean

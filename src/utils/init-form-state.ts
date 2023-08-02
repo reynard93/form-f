@@ -1,5 +1,5 @@
-import { isFieldSchema } from '../utils/schema-guard'
-import { GroupSchema } from '@typings/schema'
+import { isFieldSchema } from './schema-guard'
+import { GroupSchema } from '../../typings/schema'
 
 export function initialiseFormState(schema: GroupSchema) {
   const formState: Record<string, any> = {}

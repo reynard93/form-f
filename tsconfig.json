@@ -13,9 +13,13 @@
     "vitest.config.*",
     "lang/en.json"
   ],
+  "exclude": [
+    "src/server.ts"
+  ],
   "compilerOptions": {
     "module": "commonjs",
     "allowArbitraryExtensions": true,
+    "allowJs": true,
     "baseUrl": ".",
     "include": [
       // for unplugin-vue-components, have components.d.ts

@@ -1,16 +1,18 @@
 import { createApp } from 'vue'
 import designSys from '@momwins/mom-design-system-v3'
 import App from './App.vue'
-import { makeServer } from './server'
+// even after exclude on tsconfig still need to not import to compile
+// import { makeServer } from './server'
 import './assets/main.css'
 import messages from '../lang/en.json'
-import { piniaInstance } from '@stores/pinia'
+import { piniaInstance } from './stores/pinia'
 
 export const LaPlugin = {
   install: (app: any) => {
     app.config.globalProperties.$la = (str: string) => {
       const strArr = str.split('.')
       let message = messages
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       strArr.forEach((value: string) => (message = message[value]))
       return message
@@ -34,10 +36,12 @@ export const TestUrlPlugin = {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  makeServer()
+  // makeServer()
 }
 
 const app = createApp(App)
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 app.use(designSys)
 app.use(piniaInstance)
 app.use(LaPlugin)

@@ -25,7 +25,7 @@
   <div id="overlay" class="portal" />
 </template>
 <script lang="ts" setup>
-import Form from './Form'
+import Form from './Form.vue'
 
 const documentData = {
   responseRequestIdentity: false,
@@ -116,7 +116,8 @@ const {
 </script>
 
 <style>
-.wrapper, .wrapper > div {
+.wrapper,
+.wrapper > div {
   display: flex;
   justify-content: center;
   align-items: center;

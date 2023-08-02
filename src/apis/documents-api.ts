@@ -1,6 +1,6 @@
 // not going to use all these common-axios auth related stuff, going to stiumulate the api instead
 const documentUrl = process.env.DOCUMENT_URL as string
-const removeDocumentApi = (fileId) => {
+const removeDocumentApi = (fileId: string) => {
   return fetch(`${documentUrl}/item/${fileId}`, {
     method: 'DELETE'
   })

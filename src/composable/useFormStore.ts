@@ -1,4 +1,4 @@
-import { StoreProps } from '@typings/store'
+import { StoreProps } from '../../typings/store'
 import { createFormStore } from '../stores/create-store'
 
 // Singleton

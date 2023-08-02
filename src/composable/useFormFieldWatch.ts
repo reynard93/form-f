@@ -1,4 +1,4 @@
-import { FieldStateAndHandlers } from '@composable/useFormField'
+import { FieldStateAndHandlers } from './useFormField'
 import { Ref, watch, WatchCallback, WatchStopHandle } from 'vue'
 
 type FilterByType<Base, Type> = {

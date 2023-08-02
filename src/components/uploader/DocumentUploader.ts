@@ -1,7 +1,7 @@
 import createInputComponent, {
   FormGroupProps,
-  InputComponentProps
-} from '@utils/create-input-component'
+  type InputComponentProps
+} from '../../utils/create-input-component'
 import { defineComponent, h, PropType } from 'vue'
 
 interface Params {

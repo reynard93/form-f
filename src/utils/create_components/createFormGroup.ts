@@ -1,6 +1,6 @@
 import { h, Slots, VNode } from 'vue'
 import { components } from '@momwins/mom-design-system-v3'
-import { FormGroupProps } from '@utils/create-input-component'
+import { FormGroupProps } from '../create-input-component'
 
 export function createFormGroup(
   formGroupProps: FormGroupProps,

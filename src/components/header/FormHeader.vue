@@ -30,7 +30,7 @@ import headerHelpers, { type GetLoginDisplayProps } from '../../exports/helpers/
 import linkHelpers, {
   type GetBreadCrumbProps,
   type BreadCrumbUrls
-} from '../../exports/helpers/link.ts'
+} from '../../exports/helpers/link'
 import { decodeHTML } from 'entities'
 
 const props = defineProps<{

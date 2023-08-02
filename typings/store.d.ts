@@ -1,4 +1,4 @@
-import { GroupSchema } from '@typings/schema'
+import { GroupSchema } from './schema'
 
 export interface StoreProps {
   schema: GroupSchema

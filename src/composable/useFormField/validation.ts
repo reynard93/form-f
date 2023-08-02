@@ -1,4 +1,4 @@
-import { FieldSchema } from '@typings/schema'
+import { FieldSchema } from '../../../typings/schema'
 
 /**
  * Validates the provided value based on the current validation rules.

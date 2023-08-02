@@ -1,8 +1,8 @@
 import { isFieldSchema } from './schema-guard'
 import { capitalize, computed } from 'vue'
-import { ListFieldSchema } from '@typings/schema'
+import { ListFieldSchema } from '../../typings/schema'
 import { initialiseFormState } from './init-form-state'
-import { ListAttributes } from '@typings/list-attribute'
+import { ListAttributes } from '../../typings/list-attribute'
 
 export function createActionsFromProps(schema: any, formState: any, errorStates: any) {
   return Object.keys(schema).reduce((actions, key) => {

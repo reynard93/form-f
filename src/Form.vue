@@ -25,7 +25,7 @@
   </FormFacilitator>
 </template>
 <script setup lang="ts">
-import baseSchema from '@/baseSchema'
+import baseSchema from './baseSchema'
 import { ref } from 'vue'
 
 const storeRef = ref(null)

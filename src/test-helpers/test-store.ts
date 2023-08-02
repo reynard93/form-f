@@ -1,5 +1,5 @@
-import { createFormStore } from '@stores/create-store'
-import baseSchema from '@/baseSchema'
+import { createFormStore } from '../stores/create-store'
+import baseSchema from '../baseSchema'
 
 const testStoreProps = {
   schema: baseSchema,

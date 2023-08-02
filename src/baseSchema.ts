@@ -1,4 +1,4 @@
-import { GroupSchema, ListFieldSchema } from '@typings/schema'
+import { GroupSchema, ListFieldSchema } from '../typings/schema'
 import { validators } from '@momwins/wins-form-schemas'
 
 // make use of this testSchema for my test

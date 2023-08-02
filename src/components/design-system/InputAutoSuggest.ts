@@ -1,4 +1,4 @@
-import createInputComponent from '@utils/create-input-component'
+import createInputComponent from '../../utils/create-input-component'
 // import { useFormFieldWatch } from '@composable/useFormFieldWatch'
 
 const InputAutoSuggest = createInputComponent('mom-input-autosuggest', {

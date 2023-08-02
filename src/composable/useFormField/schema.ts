@@ -1,5 +1,5 @@
-import { FieldSchema } from '@typings/schema'
-import { ListAttributes } from '@composable/useFormField'
+import { FieldSchema } from '../../../typings/schema'
+import { ListAttributes } from '../useFormField'
 
 /**
  * Returns field schema based on the given parameters
