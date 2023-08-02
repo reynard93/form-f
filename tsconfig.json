@@ -1,18 +1,41 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue","src/**/*.ts", "src/**/*.json", "src/**/*.css", "vite.config.*", "jest.config.*", "./jest-setup.ts"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "src/**/*.ts",
+    // for unplugin-vue-components, have components.d.ts
+    "typings",
+    "src/**/*.json",
+    "src/**/*.css",
+    "vite.config.*",
+    "vitest.config.*",
+    "lang/en.json"
+  ],
   "compilerOptions": {
-    "composite": true,
+    "module": "commonjs",
+    "allowArbitraryExtensions": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
+    "include": [
+      // for unplugin-vue-components, have components.d.ts
+      "typings"
+    ],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "useUnknownInCatchVariables": false,
-    "noUncheckedIndexedAccess": true, 
-    "types": ["node", "jsdom", "jest", "vite/client"],
+    "noUncheckedIndexedAccess": true,
+    // vitest/globals is for typescript to work with vitest's global api
+    //    "types": [
+    //      "node",
+    //      "jsdom",
+    //      "vite/client",
+    //      "vitest/globals"
+    //    ],
     "importsNotUsedAsValues": "remove",
-    "preserveValueImports": false
+    "preserveValueImports": false,
+    "typeRoots": [
+      "./src/typings"
+    ]
   }
 }

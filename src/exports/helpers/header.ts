@@ -1,35 +1,33 @@
- export interface GetLoginDisplayProps {
+export interface GetLoginDisplayProps {
   company: {
-    companyUen: String
-  },
+    companyUen: string
+  }
   login: {
-    isSp: Boolean,
-    isEa: Boolean,
-    isMom: Boolean,
-    uen: String,
-    division: String,
-    branch: String,
-    branchName: String,
-    companyName: String,
-    name : String
+    isSp: boolean
+    isEa: boolean
+    isMom: boolean
+    uen: string
+    division: string
+    branch: string
+    branchName: string
+    companyName: string
+    name: string
   }
 }
 
 export interface GetLoginDisplayReturn {
-  loginFullName: String,
-  branchName: String,
-  companyName: String,
-  uenDivBranch: String
+  loginFullName: string
+  branchName: string
+  companyName: string
+  uenDivBranch: string
 }
 
 const getLoginDisplay = (userData: GetLoginDisplayProps): GetLoginDisplayReturn => {
-
   const getUenDivBranch = () => {
     const { companyUen } = userData.company
     const loginUserCompany = userData.login
 
-    if (loginUserCompany.division && loginUserCompany.branch)
-    {
+    if (loginUserCompany.division && loginUserCompany.branch) {
       return `${loginUserCompany.uen}-${loginUserCompany.division}-${loginUserCompany.branch}`
     }
 
@@ -41,7 +39,6 @@ const getLoginDisplay = (userData: GetLoginDisplayProps): GetLoginDisplayReturn 
 
     return loginUserCompany.uen
   }
- 
 
   return {
     loginFullName: getUenDivBranch(),
