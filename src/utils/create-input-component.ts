@@ -1,4 +1,4 @@
-import { defineComponent, h, inject, unref, PropType } from 'vue'
+import { defineComponent, h, inject, unref, PropType, Ref } from 'vue'
 import { ListAttributes, useFormField } from '../composable/useFormField'
 import { components } from '@momwins/mom-design-system-v3'
 import { ErrorState } from '../../typings/error-state'
@@ -33,7 +33,11 @@ export interface InputComponentProps extends Omit<FormGroupProps, OmittedFormPro
   validateOnSubmit: boolean
 }
 
-const createInputComponent = (componentName: string, componentOptions: ComponentOptions = {}) => {
+const createInputComponent = (
+  componentName: string,
+  componentOptions: ComponentOptions = {},
+  inputComponentRef?: Ref<any>
+) => {
   return defineComponent({
     props: {
       fieldId: {
@@ -133,6 +137,7 @@ const createInputComponent = (componentName: string, componentOptions: Component
           const children = [
             // TODO?: create design system component for formgroup
             h(components[kebabToPascalCase(componentName)], {
+              ref: inputComponentRef, // required for upload Component
               ...attrs,
               ...newProps,
               // TODO: dont pass unnecessary props or attrs
@@ -168,4 +173,5 @@ const createInputComponent = (componentName: string, componentOptions: Component
   })
 }
 
+// TODO: return out the ref
 export default createInputComponent

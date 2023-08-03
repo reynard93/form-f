@@ -11,6 +11,7 @@ declare module 'vue' {
     DescriptionItem: typeof import('./../src/components/design-system/DescriptionItem.vue')['default']
     DesignSystem: typeof import('./../src/components/design-system/design-system.ts')['default']
     DocumentUploader: typeof import('./../src/components/uploader/DocumentUploader.ts')['default']
+    'DocumentUploader.spec': typeof import('./../src/components/uploader/DocumentUploader.spec.ts')['default']
     FormFacilitator: typeof import('./../src/components/core/FormFacilitator.vue')['default']
     'FormFacilitator.spec': typeof import('./../src/components/__tests__/FormFacilitator.spec.ts')['default']
     'FormFacilitator.spec.d': typeof import('./../src/components/__tests__/FormFacilitator.spec.d.ts')['default']
