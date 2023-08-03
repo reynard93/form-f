@@ -3,6 +3,7 @@ import createInputComponent, {
   type InputComponentProps
 } from '../../utils/create-input-component'
 import { defineComponent, h, PropType, ref, watchEffect } from 'vue'
+import { WritableComputedRefValue } from 'vue/macros'
 
 type UploadOption = {
   params: {
@@ -71,6 +72,11 @@ const DocumentUploader = () => {
       acceptedFiles: {
         type: String,
         default: 'image/jpeg, image/png, application/pdf'
+      },
+      // new
+      deleteFile: {
+        type: Function,
+        default: () => void 0
       }
     },
     setup(props) {
@@ -80,6 +86,7 @@ const DocumentUploader = () => {
         headers: {
           Authorization: props.authHeader
         },
+        // kinda coupled, but so is the original one
         url: `${props.documentApiUrl}/upload`,
         previewUrl: `${props.documentApiUrl}/get-token`,
         previewPath: `${props.documentApiUrl}/$view/`,
@@ -94,9 +101,28 @@ const DocumentUploader = () => {
       // https://vuejs.org/guide/extras/render-function.html#template-refs
       const inputComponentRef = ref(null)
 
+      // handle validate myself?
       const UploadComponent = createInputComponent(
         'mom-upload',
         {
+          newListeners: {
+            onRemove: (file: any) => {
+              // skip emit input, apply form look at travelDocUploader, manually setting it to  store
+              const removeDocumentApi = (axiosInstance, fileId) => {
+                return documentAuthAxios.delete(`item/${fileId}`)
+              }
+
+              // hardcode and mock for now
+
+              vModel.value = !vModel.value
+            },
+            onCancel: ({ vModel }: { vModel: WritableComputedRefValue<any> }) => {
+              vModel.value = !vModel.value
+            },
+            onError: ({ vModel }: { vModel: WritableComputedRefValue<any> }) => {
+              vModel.value = !vModel.value
+            }
+          },
           newProps: {
             maxFiles: 2,
             linkType: 'securelink',

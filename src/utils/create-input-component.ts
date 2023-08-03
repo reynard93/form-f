@@ -12,6 +12,8 @@ import { createFormGroup } from './create_components/createFormGroup'
 interface ComponentOptions {
   newProps?: Record<string, any>
   newListeners?: DynamicListeners
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  validations?: Function // allow internal component validators, extend schema
   validateOn?: Listener[]
   watchers?: FieldTargetWatchFunction[] // should be an array of function each of which gets fromFieldStateAndHandler
 }
@@ -64,7 +66,8 @@ const createInputComponent = (
         // above: if any case we need to pass more props to formgroup besides fieldId inputState or errorState
         newListeners, // for you to add custom action that should happen on certain event trigger
         validateOn = [], // make sure component api supports this event emit, 'onBlur', 'onChange' etc
-        watchers = [] // enhance modularity, each of which gets fromFieldStateAndHandler
+        watchers = [], // enhance modularity, each of which gets fromFieldStateAndHandler
+        validations = {}
       } = componentOptions
 
       const listId = inject('listId', '') // provide default injection
@@ -78,7 +81,8 @@ const createInputComponent = (
       // does not matter that we pass in entire prop, useFormField will only use what it needs from destructuring
       const fieldStateAndHandler = useFormField({
         ...props,
-        listAttributes
+        listAttributes,
+        internalValidations: validations
       })
       const {
         vModel,

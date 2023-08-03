@@ -17,10 +17,12 @@ export type FieldStateAndHandlers = ReturnType<typeof useFormField>
 
 export function useFormField({
   fieldId,
-  listAttributes
+  listAttributes,
+  internalValidations = {}
 }: {
   fieldId: string
   listAttributes?: ListAttributes
+  internalValidations?: any // just like schema validations
 }) {
   const formStore = useFormStore()
   const {
@@ -84,7 +86,10 @@ export function useFormField({
   })
 
   async function validate() {
-    const { type, message } = await validateValue(vModel.value, validations)
+    const { type, message } = await validateValue(vModel.value, {
+      ...internalValidations,
+      ...validations
+    })
     errorState.errorState = type
     errorState.errorMsg = message
   }
