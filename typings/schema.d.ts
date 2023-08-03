@@ -1,7 +1,7 @@
 import { ValidationResult } from './validation'
 
 interface FieldSchema {
-  defaultValue: any
+  defaultValue?: any // if not provided, undefined
   // eslint-disable-next-line no-unused-vars
   show?: (state: any) => boolean
   // eslint-disable-next-line no-unused-vars

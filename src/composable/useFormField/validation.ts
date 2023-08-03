@@ -1,4 +1,5 @@
 import { FieldSchema } from '../../../typings/schema'
+import { ErrorState } from '../../../typings/error-state'
 
 /**
  * Validates the provided value based on the current validation rules.
@@ -9,7 +10,7 @@ export async function validateValue(
   value: any,
   validations: FieldSchema['validation'] = {}
 ): Promise<{
-  type: string
+  type: ErrorState['errorState']
   message: string
 }> {
   const DEFAULT_TYPE = 'error'

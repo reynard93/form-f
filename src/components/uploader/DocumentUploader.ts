@@ -108,7 +108,7 @@ const DocumentUploader = () => {
         },
         inputComponentRef
       )
-      // watcheffect to remove, just test i got the ref
+      // watchEffect to remove, just test i got the ref
       // Log the instance of the component // Use uploadComponentRef.value to do something
       watchEffect(() => {
         if (inputComponentRef.value && inputComponentRef.value) {

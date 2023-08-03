@@ -1,9 +1,12 @@
-import { vi, describe, it, expect } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
+import { describe, it, beforeEach, expect, vi } from 'vitest'
+import texts from '../../../lang/en.json'
 
+// all i need here is the removeFile method
 const momUploadStub = {
-  template: '<div />',
+  template: '<div>upload-stub</div>',
   methods: {
-    yourMethod: vi.fn()
+    removeFile: vi.fn()
     // other methods...
   }
 }
@@ -11,12 +14,28 @@ const momUploadStub = {
 import { mount } from '@vue/test-utils'
 import DocumentUploader from './DocumentUploader'
 import designSystem from '../../design-system'
-
+import useFormStore from '../../composable/useFormStore'
+// component relies on actual actions from the store, we won't be testing the component in isolation
+// TODO: separate out coupling with pinia on the components
+// was trying to use the mom-upload component as-is but error happens for hiddenInputContainer,
+// spent too much time hard to debug and cannot fix
 describe('DocumentUploader', () => {
+  beforeEach(() => {
+    // creates a fresh pinia and make it active so it's automatically picked
+    // up by any useStore() call without having to pass it to it:
+    // `useStore(pinia)`
+    setActivePinia(createPinia())
+    // don't use createFormStore, useFormStore instead (higher level)
+    useFormStore({
+      schema: {
+        testUpload: {}
+      }
+    })
+  })
   it('can access methods in mom-upload', async () => {
     const wrapper = mount(DocumentUploader(), {
       props: {
-        fieldId: 'testFieldId',
+        fieldId: 'testUpload',
         // other props
         index: 0,
         label: 'Your Label',
@@ -29,21 +48,29 @@ describe('DocumentUploader', () => {
         plugins: [designSystem],
         mocks: {
           // in design-system is used to dom purify
-          $html: v => v
+          $html: (v: any) => v,
+          $encode: (v: any) => v,
+          $decode: (v: any) => v,
+          $txt: (val: string) => {
+            const strArr = val.split('.')
+            let text: Record<string, any> = texts
+            strArr.forEach(value => {
+              text = text[value]
+            })
+            return text
+          }
         }
       }
     })
+    const uploadComponent = wrapper.findComponent(momUploadStub)
 
-    // const uploadComponent = wrapper.findComponent({ ref: 'inputComponentRef' })
+    expect(uploadComponent.exists()).toBe(true)
+    expect(uploadComponent.vm.removeFile).toBeDefined()
 
-    // expect(uploadComponent.exists()).toBe(true)
-    // // Here, you can test the methods in the 'mom-upload' component
-    // expect(uploadComponent.vm.yourMethod).toBeDefined()
+    // // do stuff that would result in removeFile being called
+    // await uploadComponent.vm.yourMethod()
     //
-    // await uploadComponent.vm.yourMethod() // call the method
-    //
-    // // check if the method is called
-    // expect(momUploadStub.methods.yourMethod).toHaveBeenCalled()
+    // expect(momUploadStub.methods.removeFile).toHaveBeenCalled()
   })
 })
 
