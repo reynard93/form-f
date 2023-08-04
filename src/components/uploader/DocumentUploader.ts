@@ -2,7 +2,7 @@ import createInputComponent, {
   FormGroupProps,
   type InputComponentProps
 } from '../../utils/create-input-component'
-import { defineComponent, h, PropType, ref, watchEffect } from 'vue'
+import { defineComponent, h, PropType, Ref, ref, watchEffect } from 'vue'
 import { useFormFieldWatch } from '../../composable/useFormFieldWatch'
 
 type UploadOption = {
@@ -104,7 +104,7 @@ const DocumentUploader = () => {
       let inputStateInternal: any // to sync this with inputState from store, using a watcher for it, look createInputComponent > watchers
 
       // https://vuejs.org/guide/extras/render-function.html#template-refs
-      const inputComponentRef = ref(null)
+      const inputComponentRef = ref<{ uploader: any }>()
       // maybe don't use getModelList yet? see how
       const _getModelList = (files: any) =>
         files.map((f: any) => {

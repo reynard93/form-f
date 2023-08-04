@@ -8,7 +8,7 @@ const TestMountHelper = (component: VNode<any>) =>
       plugins: [designSystem],
       mocks: {
         // in design-system is used to dom purify
-        $html: v => v
+        $html: (v: any) => v
       }
     }
   })

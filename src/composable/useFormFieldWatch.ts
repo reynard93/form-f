@@ -1,28 +1,16 @@
 import { FieldStateAndHandlers } from './useFormField'
-import { Ref, watch, WatchCallback, WatchStopHandle } from 'vue'
+import { watch, WatchCallback, WatchStopHandle } from 'vue'
+import { DynamicListeners } from '../../typings/listener'
 
-// type FilterByType<Base, Type> = {
-//   [Key in keyof Base]: Base[Key] extends Type ? Key : never
-// }
-// type MatchedKeys = FilterByType<FieldStateAndHandlers, Ref<any>>
-// type WatchableStates = Pick<FieldStateAndHandlers, MatchedKeys[keyof MatchedKeys]>
-
-// maybe can use Extract here instead?
-// ReactiveVariable<any> | extract inside should be from loop
-// how to loop through an object type
-type RefTypes<T> = Extract<
+type FieldHandlersAndListeners<T> = Extract<
   {
     [P in keyof T]: { key: P; value: T[P] }
   }[keyof T],
-  { key: any; value: Ref }
->
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  { key: any; value: Function | DynamicListeners }
+>['key']
 
-type WatchableStates = RefTypes<FieldStateAndHandlers>
-// type WatchableStates = Pick<FieldStateAndHandlers, keyof Extract<FieldStateAndHandlers, Ref<any>>>
-
-//     {
-//   [P in keyof FieldStateAndHandlers]: Pick<Extract<FieldStateAndHandlers[P], Ref<any>>>
-// }
+type WatchableStates = Omit<FieldStateAndHandlers, FieldHandlersAndListeners<FieldStateAndHandlers>>
 
 export type FieldTargetWatchFunction = (
   // eslint-disable-next-line no-unused-vars
