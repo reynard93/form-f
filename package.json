@@ -1,6 +1,6 @@
 {
   "name": "wins-common-form-component-v3",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "main": "./dist/system.umd.js",
   "module": "./dist/system.es.js",
