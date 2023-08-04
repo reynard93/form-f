@@ -3,7 +3,7 @@ import createInputComponent, {
   type InputComponentProps
 } from '../../utils/create-input-component'
 import { defineComponent, h, PropType, ref, watchEffect } from 'vue'
-import { WritableComputedRefValue } from 'vue/macros'
+import { useFormFieldWatch } from '../../composable/useFormFieldWatch'
 
 type UploadOption = {
   params: {
@@ -31,14 +31,15 @@ const DocumentUploader = () => {
         default: ''
       },
       /*** newProps ***/
-      // messageText should be passed down from schema if error
+      // messageText should be passed down from schema if error add it thru validations
+      // accomodate schema to get in messageText default
       // how do i accommodate that? messageText should be dynamic
-      messageText: {
-        // TODO: turn into messageTextInternal
-        type: String,
-        default: ''
-      },
-      // TODO: ? don't seem to need this, see if need to override other props
+      // messageText: {
+      //   // TODO: turn into messageTextInternal
+      //   type: String,
+      //   default: ''
+      // },
+      // TODO: ? don't seem to need this, see if need to override other props then need
       options: {
         // TODO: type this better
         type: Object as PropType<UploadOption>,
@@ -98,29 +99,43 @@ const DocumentUploader = () => {
           throwPdfError: true
         }
       }
+
+      const vModelInternal = ref([])
+      let inputStateInternal: any // to sync this with inputState from store, using a watcher for it, look createInputComponent > watchers
+
       // https://vuejs.org/guide/extras/render-function.html#template-refs
       const inputComponentRef = ref(null)
+      // maybe don't use getModelList yet? see how
+      const _getModelList = (files: any) =>
+        files.map((f: any) => {
+          f.docType = props.docType || ''
+          delete f.file
+          return f
+        })
 
       // handle validate myself?
       const UploadComponent = createInputComponent(
         'mom-upload',
         {
           newListeners: {
-            onRemove: (file: any) => {
-              // skip emit input, apply form look at travelDocUploader, manually setting it to  store
-              const removeDocumentApi = (axiosInstance, fileId) => {
-                return documentAuthAxios.delete(`item/${fileId}`)
+            // need to ensure each of them run
+            // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+            onRemove: ({ dispatch, vModel, reset, errorState }, file) => {
+              if (file && file.id) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                props.deleteFile(file.id)
+                inputComponentRef?.value?.uploader?.removeFile(file)
+                reset()
               }
-
-              // hardcode and mock for now
-
-              vModel.value = !vModel.value
             },
-            onCancel: ({ vModel }: { vModel: WritableComputedRefValue<any> }) => {
-              vModel.value = !vModel.value
+            onCancel: (file: any) => {
+              if (file && file.id) {
+                inputComponentRef?.value?.uploader?.removeFile(file)
+              }
             },
-            onError: ({ vModel }: { vModel: WritableComputedRefValue<any> }) => {
-              vModel.value = !vModel.value
+            onError: error => {
+              // vModel.value = !vModel.value
             }
           },
           newProps: {
@@ -130,7 +145,16 @@ const DocumentUploader = () => {
             acceptedFiles: props.acceptedFiles,
             maxTotalFileSize: props.maxTotalFileSize,
             ...optionsModel
-          }
+          },
+          watchers: [
+            // leave this here for now though don't really know what this 'reset' is for
+            useFormFieldWatch('options', ({ reset, resetSelection }) => () => {
+              console.log('resetSelection', resetSelection)
+              if (resetSelection) {
+                reset()
+              }
+            })
+          ]
         },
         inputComponentRef
       )
@@ -147,7 +171,10 @@ const DocumentUploader = () => {
           fieldId: props.fieldId,
           size: 'l',
           index: props.index,
-          label: props.label
+          label: props.label,
+          inputState: inputStateInternal,
+          // use modelValue(code) instead of v-model(template)
+          modelValue: vModelInternal // whatever emitted from actions then run _getModelList to save to actual store
         })
       }
     }

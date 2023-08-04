@@ -28,7 +28,9 @@ describe('DocumentUploader', () => {
     // don't use createFormStore, useFormStore instead (higher level)
     useFormStore({
       schema: {
-        testUpload: {}
+        testUpload: {
+          defaultValue: []
+        }
       }
     })
   })
