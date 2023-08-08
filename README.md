@@ -2,6 +2,22 @@
 
 ## Architecture Overview
 
+```mermaid
+graph TD
+    A([Schema]) --> B[FormFacilitator]
+    B --> D[useFormStore: Pinia Store Singleton]
+    B -->|calls with schema| E[createFormStore]
+    D -->|calls| E
+    E --> F[initialiseFormState]
+    E --> G[createActionsFromProps]
+    H[FormList: fieldId] --> D
+    I[Component1, Component2, ...] --> H
+    I --> J[useFormField with ListAttributes]
+    J --> D
+    K[Component independent] --> L[useFormField without ListAttributes]
+    L --> D
+```
+
 ![Form Component Diagram](public%2Fmermaid-diagram-2023-08-08-133910.svg)
 
 ## Recommended IDE Setup
@@ -217,5 +233,35 @@ watchValue(watchableStates, props);
 
 The `useFormFieldWatch` function only works with the states that are Vue Refs, hence the type `WatchableStates`. This
 means that any primitive or non-reactive properties of the field's state cannot be watched with this function.
+
+Positive Aspects:
+
+- Separation of Concerns: There is a clear distinction between different parts of the system, such as the form
+  facilitator, Pinia store, form list, and individual components.
+- Reusability: The components like Component1, Component2, etc., and the form list can be used independently or within
+  the context of a FormList, providing flexibility.
+- Singleton Pattern for Store: Using useFormStore to facilitate a singleton pattern for the form store ensures that
+  there is a single source of truth for the form state.
+
+- Potential Improvements and Considerations:
+
+- Complexity: The architecture has multiple layers of abstraction and interconnections, which might lead to increased
+  complexity. Ensuring good documentation, clear naming conventions, and possibly breaking down some functions into
+  smaller parts can alleviate this.
+
+- Error Handling: From the code and diagram, it's not immediately clear how errors are handled across different parts of
+  the architecture. Robust error handling mechanisms should be implemented and documented.
+
+- Performance Considerations: The use of watchers, especially with validation, needs to be carefully optimized to
+  prevent unnecessary recalculations and rerenders. Profiling and optimizing these parts could be beneficial.
+
+- Dependency Injection: Consider dependency injection for shared services or functions, which might make testing and
+  maintenance easier.
+
+- Testing: Unit tests should be comprehensive and cover all the critical paths of the application. Writing tests can
+  sometimes reveal architectural weaknesses or areas that could be refactored for clarity and robustness.
+
+- Type Safety: It seems like there's good use of TypeScript in defining types like ListAttributes. Ensure that types are
+  used consistently across the application to improve maintainability and reduce runtime errors.
 
 ---
