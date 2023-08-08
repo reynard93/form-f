@@ -1,5 +1,9 @@
 # wins-common-form-component-v3
 
+## Architecture Overview
+
+![Form Component Diagram](public%2Fmermaid-diagram-2023-08-08-133910.svg)
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and
@@ -71,12 +75,12 @@ Creates a new Vue.js component based on provided name and options.
 - `componentName`: (type: string) The name of the component to be created.
 - `componentOptions`: (type: object) The options to configure the new component. Default value is an empty object. The
   object can contain the following properties:
-  - `newProps`: An object that specifies additional props to be added to the component.
-  - `newListeners`: An object that specifies additional listeners to be added to the component.
-  - `validateOn`: An array of string events upon which validation should be triggered. Make sure the component's API
-    supports the listed events (e.g., 'onBlur', 'onChange', etc.).
-  - `watchers`: An array of functions that observe and respond to changes on the component. Each watcher function will
-    receive `fieldStateAndHandler` as input.
+    - `newProps`: An object that specifies additional props to be added to the component.
+    - `newListeners`: An object that specifies additional listeners to be added to the component.
+    - `validateOn`: An array of string events upon which validation should be triggered. Make sure the component's API
+      supports the listed events (e.g., 'onBlur', 'onChange', etc.).
+    - `watchers`: An array of functions that observe and respond to changes on the component. Each watcher function will
+      receive `fieldStateAndHandler` as input.
 
 **Returns:**
 
@@ -86,16 +90,16 @@ A new Vue.js component configured based on the provided parameters.
 
 ```javascript
 const NewComponent = createInputComponent('NewComponentName', {
-  newProps: {
-    prop1: value1,
-    prop2: value2
-  },
-  newListeners: {
-    listener1: function1,
-    listener2: function2
-  },
-  validateOn: ['onBlur', 'onChange'],
-  watchers: [watchFunction1, watchFunction2]
+    newProps: {
+        prop1: value1,
+        prop2: value2
+    },
+    newListeners: {
+        listener1: function1,
+        listener2: function2
+    },
+    validateOn: ['onBlur', 'onChange'],
+    watchers: [watchFunction1, watchFunction2]
 });
 ```
 
@@ -201,8 +205,8 @@ parameters: `watchableStates` (object that includes the field's state) and `prop
 
 ```javascript
 const watchValue = useFormFieldWatch('value', () => {
-  // This is the function that will be triggered whenever the 'value' state changes.
-  console.log('Value has changed');
+    // This is the function that will be triggered whenever the 'value' state changes.
+    console.log('Value has changed');
 });
 
 // To use the watcher, call the returned function with the watchableStates and props.
