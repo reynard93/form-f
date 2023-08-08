@@ -18,8 +18,6 @@ graph TD
     L --> D
 ```
 
-![Form Component Diagram](public%2Fmermaid-diagram-2023-08-08-133910.svg)
-
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and
