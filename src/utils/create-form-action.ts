@@ -1,8 +1,10 @@
 import { isFieldSchema } from './schema-guard'
-import { capitalize, computed } from 'vue'
+import { capitalize, computed, nextTick } from 'vue'
 import { ListFieldSchema } from '../../typings/schema'
 import { initialiseFormState } from './init-form-state'
 import { ListAttributes } from '../../typings/list-attribute'
+// nextTick ensures that all the updates within the same event loop tick are batched together, so Vue can handle them more efficiently.
+// some performance improvement for list fields
 
 // Function to handle actions for field schema
 function handleFieldSchemaActions(key: string, formState: any, actions: Record<string, any>) {
@@ -27,13 +29,18 @@ function handleListSchemaActions(
 ) {
   const actionName = `${capitalize(key)}`
   actions['addIdx' + actionName] = () => {
-    errorStates.value[key][currentIdx.value] = {}
-    formState.value[key][currentIdx.value] = initialiseFormState(_schemaList.schema)
+    nextTick(() => {
+      errorStates.value[key][currentIdx.value] = {}
+      formState.value[key][currentIdx.value] = initialiseFormState(_schemaList.schema)
+    })
   }
   actions['removeIdx' + actionName] = function (index: number) {
     if (currentIdx.value - 1 >= _schemaList.min) {
-      formState.value[key].splice(index, 1) // where dont need .value?
-      errorStates.value[key].splice(index, 1)
+      // likely to be called within a rapid loop
+      nextTick(() => {
+        formState.value[key].splice(index, 1) // where dont need .value?
+        errorStates.value[key].splice(index, 1)
+      })
     }
   }
 }

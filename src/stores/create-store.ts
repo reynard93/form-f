@@ -34,14 +34,9 @@ export const createFormStore = (storeProps?: StoreProps) => {
   // using this defineStore way provides a lot more flexibility -> 1) watchers within the store and 2) freely use any composable
   return defineStore('FormStore', () => {
     const actions = createActionsFromProps(schema, formState, errorStates)
-    // putting it here makes it run only once for every click for validateForm
-    // although can watch in respective field component and not pass back up to form component validate function
-    // this is more efficient as it only runs for the fields that are shown and once for every click and provides flexibility to run validate out of order
-
     // validateCount only change when 'submit' button is clicked
-    // since this approach requires us to store the validators in the state
     watch(
-      // when trying to watch a particular property of a reactive object (in this case formState.validateCount), you should wrap it in a function
+      // when trying to watch a particular property of a reactive object you should wrap it in a function
       () => formState.value.validateCount,
       handleValidation(validators),
       { immediate: false }
