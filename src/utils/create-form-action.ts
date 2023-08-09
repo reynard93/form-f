@@ -4,7 +4,6 @@ import { ListFieldSchema } from '../../typings/schema'
 import { initialiseFormState } from './init-form-state'
 import { ListAttributes } from '../../typings/list-attribute'
 // nextTick ensures that all the updates within the same event loop tick are batched together, so Vue can handle them more efficiently.
-// some performance improvement for list fields
 
 // Function to handle actions for field schema
 function handleFieldSchemaActions(key: string, formState: any, actions: Record<string, any>) {
