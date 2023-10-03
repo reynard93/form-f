@@ -27,15 +27,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import headerHelpers, { type GetLoginDisplayProps } from '../../exports/helpers/header'
-import linkHelpers, {
-  type GetBreadCrumbProps,
-  type BreadCrumbUrls
-} from '../../exports/helpers/link'
+// import linkHelpers, {
+  // type GetBreadCrumbProps,
+  // type BreadCrumbUrls
+// } from '../../exports/helpers/link'
 import { decodeHTML } from 'entities'
 
 const props = defineProps<{
   userData: GetLoginDisplayProps
-  breadcrumbUrls: BreadCrumbUrls
+  breadcrumbUrls: any,
   title: string
   subtitle: string
   lastSavedTime: string
@@ -52,7 +52,7 @@ const events = defineEmits(['breadcrumb-action', 'logout', 'save'])
 const loginDisplay = computed(() => headerHelpers.getLoginDisplay(props.userData))
 
 const breadCrumb = computed(() => {
-  const params: GetBreadCrumbProps = {
+  const params: any = {
     isQuickMenu: props.isQuickMenu,
     isMom: !!props.userData.login.isMom,
     isSp: !!props.userData.login.isSp,
@@ -61,7 +61,8 @@ const breadCrumb = computed(() => {
     urls: props.breadcrumbUrls
   }
 
-  return linkHelpers.getBreadCrumb(params)
+  // return linkHelpers.getBreadCrumb(params)
+  return []
 })
 
 const subtitleInfo = computed((): Array<{ name: String; otherInfo: String }> => {

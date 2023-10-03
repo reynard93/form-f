@@ -5,7 +5,7 @@ import { ref, watch } from 'vue'
 import { initialiseFormState } from '../utils/init-form-state'
 import { createActionsFromProps } from '../utils/create-form-action'
 
-function handleValidation(validators) {
+function handleValidation(validators: any) {
   return (newCount: number, oldCount: number) => {
     if (oldCount !== newCount) {
       // run all validations for currently showing fields
