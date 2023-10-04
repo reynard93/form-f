@@ -19,7 +19,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:dev": "vitest --watch-all --coverage false",
-    "build-only": "vite build",
+    "build-only": "vite build --config vite.config.ts",
     "type-check": "vue-tsc --noEmit --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"

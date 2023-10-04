@@ -22,8 +22,16 @@ export default defineConfig(({ mode }) => {
     build: {
       lib: {
         entry: path.resolve(__dirname, 'src/system.ts'),
-        name: 'CommonFormComponent',
+        name: 'FormFacilitator',
         fileName: format => `system.${format}.js`
+      },
+      rollupOptions: {
+        external: ["vue"],
+        output: {
+          globals: {
+            vue: "Vue"
+          }
+        }
       }
     },
     resolve: {
