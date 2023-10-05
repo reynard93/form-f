@@ -1,0 +1,113 @@
+include:
+  
+  - project: wog/mom/wins/mom-wins2/devops/gitlab-include-templates
+    ref:     "main"
+    file:
+      - SAST.gitlab-ci.yml
+      - SCORECARD.gitlab-ci.yml
+      - gitlab-ci-slsa-common.yml
+      - SCA.gitlab-ci.yml
+      - DAST.gitlab-ci.yml
+      - Container-Scanning-Signing.gitlab-ci.yml
+      
+ # - local: BUILD.gitlab-ci.yml
+ ## - local: TEST.gitlab-ci.yml
+
+
+
+ # - local: gitlab-ci-generate-maturity-report.yml
+#variables:
+   # #SONAR_PROJECTKEY: "$SONAR_PROJECTKEY"
+    #SONAR_TOKEN: "$SONAR_TOKEN"
+    
+
+default:
+  tags:
+    - ship_docker
+    - non_privileged
+
+variables:
+   
+    ENVIRONMENT: test
+    COSIGN_YES: "true"
+    CONTAINER_PROXY: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/"
+    CONTAINER_PROXY_SERVER: "${CI_DEPENDENCY_PROXY_SERVER}"
+    CONTAINER_PROXY_PASSWORD: "${CI_DEPENDENCY_PROXY_PASSWORD}"
+    CONTAINER_PROXY_USER: "${CI_DEPENDENCY_PROXY_USER}"
+    DOCKER_IMAGE_NAME: "${IMAGE_VERSION}"
+    access_token: "${access_token}"
+    VERSION: "2.0.$CI_PIPELINE_IID"
+    ARTEFACT_ID: "$CI_PROJECT_NAME"
+    ARTEFACT_PACKAGE: "zip"
+    ARTEFACT_VERSION: $VERSION
+    OUTPUT_ARTEFACT: "$ARTEFACT_ID.$ARTEFACT_PACKAGE"
+    DEPLOY_ARTEFACT: "prod/$OUTPUT_ARTEFACT"
+    CS_IMAGE: ${CI_REGISTRY_IMAGE}:${IMAGE_VERSION}
+    FOD_RELEASE: 2197
+    DOCKER_USER: $CI_REGISTRY_USER
+    GIT_STRATEGY: fetch
+    CS_DOCKERFILE_PATH: ${CI_PROJECT_DIR}/Dockerfile.runtime
+    IMG_NAME_W_DIGEST: ${CI_REGISTRY_IMAGE}:${IMAGE_VERSION}
+    DOCKER_USER: $CI_REGISTRY_USER
+    DOCKER_PASSWORD: $CI_REGISTRY_PASSWORD
+    SBOM_FILE: gl-sbom-report.cdx.json
+    SONARQUBE_URL: "https://sonar1.hats.stack.gov.sg/sonar"
+    SCAN_TARGETS: ${CI_REGISTRY_IMAGE}:${IMAGE_VERSION}
+    WORKING_DIR: . # (Optional) default to "." 
+    IMAGE_NAME: "${IMAGE_VERSION}"
+    DOCKER_REGISTRY: $CI_REGISTRY_IMAGE
+    IMAGE_VERSION: ${CI_PROJECT_NAME}_${CI_PIPELINE_ID}
+    DIGESTFILE_NAME: "$CI_PROJECT_DIR/digest"
+    OPTS: ""
+    OUTPUT_IMAGE_TAR: "${CI_PROJECT_DIR}/${DOCKER_IMAGE_NAME}.tar"
+
+stages:
+  - build
+ # - maturity-report 
+  - scan-and-lint
+  - static-test
+  - deploy-to-testing-env
+  - runtime-test
+  - test
+  - SCA
+  #- publish
+  - code_quality
+  - SAST
+#  - build
+  - sign
+  - verify
+  - dast
+  - maturity-report
+  - publish-artifact
+  - deploy-to-prod
+
+
+
+upload:
+    #image: curlimages/curl:latest
+    image: $PIPELINE_COE_REGISTRY/nodejs-container:latest
+    stage: publish-artifact
+    allow_failure: true       
+    script:
+     - apt-get update && apt-get install -y curl
+     - ls ${CI_PROJECT_NAME}_output
+ # #   - echo "${CI_PROJECT_ID}_${CI_pipeline_ID}_${CI_JOB_ID}_${CI_COMMIT_SHORT_SHA}" >> ${CI_PROJECT_NAME}_output/Version.txt
+     - tar -czf ${CI_PROJECT_NAME}_output.tar.gz ./${CI_PROJECT_NAME}_output/*
+     - ls -al
+  
+     #- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "./${CI_PROJECT_NAME}_output/*" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_COMMIT_SHORT_SHA}/${CI_PROJECT_NAME}"'
+     - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "${CI_PROJECT_NAME}_output.tar.gz" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}_${CI_ENVIRONMENT_NAME}_output.tar.gz"'
+    artifacts:
+      paths:
+        -  ./${CI_PROJECT_NAME}_output
+
+
+
+
+
+  
+
+        
+
+
+
