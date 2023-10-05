@@ -1,6 +1,6 @@
 include:
   
-  - project: wog/mom/wins/mom-wins2/devops/gitlab-include-templates
+  - project: wog/mom/wins/wins-po/ops-shared/infra/common/gitlab-include-templates
     ref:     "main"
     file:
       - SAST.gitlab-ci.yml
@@ -12,13 +12,7 @@ include:
       
  # - local: BUILD.gitlab-ci.yml
  ## - local: TEST.gitlab-ci.yml
-
-
-
  # - local: gitlab-ci-generate-maturity-report.yml
-#variables:
-   # #SONAR_PROJECTKEY: "$SONAR_PROJECTKEY"
-    #SONAR_TOKEN: "$SONAR_TOKEN"
     
 
 default:
@@ -81,33 +75,25 @@ stages:
   - publish-artifact
   - deploy-to-prod
 
-
-
-upload:
-    #image: curlimages/curl:latest
-    image: $PIPELINE_COE_REGISTRY/nodejs-container:latest
-    stage: publish-artifact
-    allow_failure: true       
-    script:
-     - apt-get update && apt-get install -y curl
-     - ls ${CI_PROJECT_NAME}_output
- # #   - echo "${CI_PROJECT_ID}_${CI_pipeline_ID}_${CI_JOB_ID}_${CI_COMMIT_SHORT_SHA}" >> ${CI_PROJECT_NAME}_output/Version.txt
-     - tar -czf ${CI_PROJECT_NAME}_output.tar.gz ./${CI_PROJECT_NAME}_output/*
-     - ls -al
+.upload_artifact_example:
+  #image: curlimages/curl:latest
+  image: $PIPELINE_COE_REGISTRY/nodejs-container:latest
+  stage: publish-artifact
+  allow_failure: true       
+  script:
+    - apt-get update && apt-get install -y curl
+    - ls ${CI_PROJECT_NAME}_output
+  #   - echo "${CI_PROJECT_ID}_${CI_pipeline_ID}_${CI_JOB_ID}_${CI_COMMIT_SHORT_SHA}" >> ${CI_PROJECT_NAME}_output/Version.txt
+    - tar -czf ${CI_PROJECT_NAME}_output.tar.gz ./${CI_PROJECT_NAME}_output/*
+    - ls -al
   
-     #- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "./${CI_PROJECT_NAME}_output/*" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_COMMIT_SHORT_SHA}/${CI_PROJECT_NAME}"'
-     - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "${CI_PROJECT_NAME}_output.tar.gz" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}_${CI_ENVIRONMENT_NAME}_output.tar.gz"'
-    artifacts:
+    ##- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "./${CI_PROJECT_NAME}_output/*" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_COMMIT_SHORT_SHA}/${CI_PROJECT_NAME}"'
+    # - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "${CI_PROJECT_NAME}_output.tar.gz" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}_${CI_ENVIRONMENT_NAME}_output.tar.gz"' 
+   #  - 'curl --header "PRIVATE-TOKEN: $package_access" --upload-file "${CI_PROJECT_NAME}_output.tar.gz" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}_${CI_ENVIRONMENT_NAME}_output.tar.gz"' 
+    #- 'curl -u "$CI_DEPLOY_USER:$CI_DEPLOY_PASSWORD" --upload-file "${CI_PROJECT_NAME}_output.tar.gz" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}_${CI_PROJECT_NAME}/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}_${CI_ENVIRONMENT_NAME}_output.tar.gz"' 
+
+  artifacts:
       paths:
         -  ./${CI_PROJECT_NAME}_output
-
-
-
-
-
-  
-
-        
-
 
 
