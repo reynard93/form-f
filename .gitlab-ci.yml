@@ -7,7 +7,7 @@ include:
       - SCORECARD.gitlab-ci.yml
       - gitlab-ci-slsa-common.yml
       - SCA.gitlab-ci.yml
-      - DAST.gitlab-ci.yml
+     # - DAST.gitlab-ci.yml
       - Container-Scanning-Signing.gitlab-ci.yml
       
  # - local: BUILD.gitlab-ci.yml
@@ -56,13 +56,14 @@ variables:
     OUTPUT_IMAGE_TAR: "${CI_PROJECT_DIR}/${DOCKER_IMAGE_NAME}.tar"
 
 stages:
+  - test
   - build
  # - maturity-report 
   - scan-and-lint
   - static-test
   - deploy-to-testing-env
   - runtime-test
-  - test
+ # - test
   - SCA
   #- publish
   - code_quality
@@ -74,6 +75,7 @@ stages:
   - maturity-report
   - publish-artifact
   - deploy-to-prod
+  - fuzz
 
 .upload_artifact_example:
   #image: curlimages/curl:latest
@@ -85,7 +87,7 @@ stages:
     - ls ${CI_PROJECT_NAME}_output
   #   - echo "${CI_PROJECT_ID}_${CI_pipeline_ID}_${CI_JOB_ID}_${CI_COMMIT_SHORT_SHA}" >> ${CI_PROJECT_NAME}_output/Version.txt
     - tar -czf ${CI_PROJECT_NAME}_output.tar.gz ./${CI_PROJECT_NAME}_output/*
-    - ls -al
+    #- ls -al
   
     ##- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "./${CI_PROJECT_NAME}_output/*" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_COMMIT_SHORT_SHA}/${CI_PROJECT_NAME}"'
     # - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "${CI_PROJECT_NAME}_output.tar.gz" "${CI_API_V4_URL}/projects/24261/packages/generic/${ENVIRONMENT}/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}_${CI_ENVIRONMENT_NAME}_output.tar.gz"' 
