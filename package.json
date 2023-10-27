@@ -21,6 +21,7 @@
     "test:dev": "vitest --watch-all --coverage false",
     "build-only": "vite build --config vite.config.ts",
     "type-check": "vue-tsc --noEmit --composite false",
+    "publish:dev": "npm run build && yalc push",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
