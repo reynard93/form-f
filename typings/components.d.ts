@@ -8,6 +8,5 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     FormHeader: typeof import('./../src/components/header/FormHeader.vue')['default']
-    FormList: typeof import('./../src/components/core/FormList.ts')['default']
   }
 }

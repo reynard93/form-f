@@ -115,7 +115,9 @@ function processSlotContent(
         formState,
         dispatch,
         onDispatch: value => {
-          slotContent.props?.onDispatch(value)
+          if (slotContent.props.onDispatch) {
+            slotContent.props?.onDispatch(value)
+          }
         },
         validate,
         // pass down explicitly form group related inputs

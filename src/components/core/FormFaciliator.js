@@ -1,6 +1,11 @@
 import { h, defineComponent, ref } from 'vue'
-import initialiseForm from '../../helpers/initialise-form'
+import {
+  createFormDispatchers,
+  createFormState,
+  getFormValidator
+} from '../../helpers/initialise-form'
 import processSlotContent from '../../helpers/process-form-slots'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'FormFacilitator',
@@ -15,17 +20,24 @@ export default defineComponent({
     messages: {
       type: Object
     },
-    state: {
+    piniaStore: {
       type: Object // either pinia or vuex
-    },
-    dispatchers: {
-      type: Object
     }
   },
   setup(props, { slots, expose }) {
+    // currently support composition api first, but this ccomes with complexity in getting actions
+    let formState, formDispatchers
     // TODO: provide manual mode, pass in formState, dispatchers, manually
     // if pass dispatchers need to name them in a specific form
-    const { formState, formDispatchers, formValidators } = initialiseForm(props.schema)
+    const formValidators = getFormValidator(props.schema)
+    if (props.piniaStore) {
+      formState = storeToRefs(props.piniaStore)
+      // use interface to ensure pinia store has actions property, give appropriate warning
+      formDispatchers = props.piniaStore.actions
+    } else {
+      formState = createFormState(props.schema)
+      formDispatchers = createFormDispatchers(formState, props.schema)
+    }
     const formInputRefs = ref({})
 
     // do i have the ref for repeat? if so inside of validateAll if it is repeat i call its validateAll

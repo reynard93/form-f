@@ -87,7 +87,7 @@ export default defineComponent({
     // change vModel here similar to v3 get should be from the state, computed writable ref
     const vModel = computed({
       get() {
-        return props.state
+        return props.state.value
       },
       set(value) {
         props.dispatch(value)

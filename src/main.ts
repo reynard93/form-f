@@ -6,6 +6,7 @@ import App from './App.vue'
 import './assets/main.css'
 import messages from '../lang/en.json'
 import { piniaInstance } from './stores/pinia'
+import formComponent from '../src/system'
 
 export const LaPlugin = {
   install: (app: any) => {
@@ -43,6 +44,7 @@ const app = createApp(App)
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 app.use(designSys)
+app.use(formComponent)
 app.use(piniaInstance)
 app.use(LaPlugin)
 app.use(TestUrlPlugin)

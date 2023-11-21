@@ -17,8 +17,10 @@
     "src/server.ts"
   ],
   "compilerOptions": {
+    "declaration": true,
     "module": "commonjs",
     "allowArbitraryExtensions": true,
+    "noImplicitAny": false,
     "allowJs": true,
     "baseUrl": ".",
     "include": [

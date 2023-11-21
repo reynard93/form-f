@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite'
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
+    module: 'esnext',
     define: {
       'process.env': env
     },
@@ -20,6 +21,9 @@ export default defineConfig(({ mode }) => {
       }
     },
     build: {
+     emptyOutDir: true,
+      outDir: env.BUILD_OUTDIR,
+      sourcemap: mode === 'development' ? true : false,
       lib: {
         entry: path.resolve(__dirname, 'src/system.ts'),
         name: 'FormFacilitator',
@@ -46,7 +50,8 @@ export default defineConfig(({ mode }) => {
         dts: 'typings/components.d.ts',
         extensions: ['vue', 'ts']
       }),
-      vueJsx()
+      vueJsx(),
+      splitVendorChunkPlugin()
     ]
   }
 })
