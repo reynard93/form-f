@@ -1,6 +1,6 @@
 import { h, defineComponent, ref } from 'vue'
-import initialiseForm from '@/helpers/initialise-form'
-import processSlotContent from '@/helpers/process-form-slots'
+import initialiseForm from '../../helpers/initialise-form'
+import processSlotContent from '../../helpers/process-form-slots'
 
 export default defineComponent({
   name: 'FormFacilitator',

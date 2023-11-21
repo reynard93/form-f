@@ -1,8 +1,5 @@
 import { h, defineComponent, computed, reactive, watch } from 'vue'
 import { components } from '@momwins/mom-design-system-v3'
-import { locales } from '@/plugins'
-
-const { t } = locales.global
 
 export default defineComponent({
   name: 'FormInput', // add possible emits accordingly
@@ -101,7 +98,7 @@ export default defineComponent({
     const _getErrorMessage = key => {
       const slotId = props.fieldId.split('.').pop()
       const messageKeyPath = props.messages?.[slotId]?.[key]
-      return messageKeyPath ? t(messageKeyPath) : ''
+      return messageKeyPath || ''
     }
     // TODO: move modelValidate and modelUpdate to a separate file to simplify testing
 
@@ -114,8 +111,7 @@ export default defineComponent({
 
         if (!response || (typeof response === 'object' && response.result === false)) {
           inputState.state = response?.type || 'error'
-          inputState.text =
-            _getErrorMessage(validationName) || response?.message || t('error.common.general')
+          inputState.text = _getErrorMessage(validationName) || response?.message
           return false
         }
         // if validation is successful reset the input state
