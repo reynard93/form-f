@@ -1,6 +1,6 @@
 {
   "name": "form-facilitator",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "main": "./dist/system.umd.js",
   "module": "./dist/system.es.js",
   "exports": {
