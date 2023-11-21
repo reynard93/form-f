@@ -1,6 +1,6 @@
 // recursive function to process slotContent
 import { capitalize, computed, h, watch } from 'vue'
-import FormInput from '../components/FormInput'
+import FormInput from '../components/core/FormInput'
 
 function injectProps(
   slotContent,
