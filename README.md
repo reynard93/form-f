@@ -18,6 +18,21 @@ graph TD
     L --> D
 ```
 
+```mermaid
+graph TB
+  FormFacilitatorV2 -->|uses| initialiseForm
+  FormFacilitatorV2 -->|uses| processSlotContent
+  FormFacilitatorV2 -->|exposes| validateAll
+  FormFacilitatorV2 -->|renders| FormRepeater
+  FormRepeater -->|uses| createFormState
+  FormRepeater -->|uses| processNestedSlotContent
+  FormRepeater -->|exposes| validateAll
+  FormRepeater -->|renders| FormInput
+  processSlotContent -->|uses| FormInput
+  processNestedSlotContent -->|uses| FormInput
+  FormInput -->|uses| components.MomFormGroup
+```
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and
