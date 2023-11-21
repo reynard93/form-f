@@ -1,10 +1,13 @@
 import { h, defineComponent, computed, reactive, watch } from 'vue'
 import { components } from '@momwins/mom-design-system-v3'
+import { locales } from '@/plugins'
+
+const { t } = locales.global
 
 export default defineComponent({
-  name: 'FormInput',
+  name: 'FormInput', // add possible emits accordingly
+  inheritAttrs: true,
   props: {
-    // do i need my schema for anything here? dont think so
     label: {
       type: String
     },
@@ -14,8 +17,8 @@ export default defineComponent({
     fieldId: {
       type: String
     },
-    // eslint-disable-next-line vue/require-prop-types
     state: {},
+    formState: {},
     validateOn: {
       type: String, // unless explicitly overwritten will follow updateOn
       default: '' // the usual handler but also one extra 'onSubmit', 'onBlur' also valid, TODO
@@ -28,7 +31,7 @@ export default defineComponent({
     dispatch: {
       type: Function,
       default: () => {
-        console.log('default dispatch')
+        // console.log('default dispatch')
       }
     },
     validate: {
@@ -38,44 +41,42 @@ export default defineComponent({
     options: {
       type: Array
     },
-    localisation: {
-      type: Function,
-      default: () => {}
+    inputProps: {
+      type: Object
     }
   },
-  emits: ['dispatch', 'validated'], // add possible emits accordingly
+  emits: ['dispatch', 'validated'],
   setup(props, { slots, emit, expose }) {
     // isolate props for MomFormGroup
     const formGroupPropsKeys = [
       'label',
       'type',
       'size',
-      // 'inputState',
       'inlineInput',
       'labelWidth',
       'tooltip',
       'hintText',
-      // 'messageText',
       'messageType',
       'optional',
       'showBullet'
     ]
 
-    const inputState = reactive({})
+    const inputState = reactive({
+      state: null,
+      text: ''
+    })
 
     const resetInputState = () => {
       inputState.state = null
       inputState.text = ''
     }
 
+    // so that when toggle radio button reusing the same formInput next, inputState is reset
     watch(
-      props,
-      (curr, prev) => {
-        // to reset state when toggle btwn input slots at the same position
-        // bcz form inputs are reused
+      () => props.fieldId,
+      () => {
         resetInputState()
-      },
-      { deep: true }
+      }
     )
 
     // this computed property should be tested
@@ -98,36 +99,43 @@ export default defineComponent({
     })
 
     const _getErrorMessage = key => {
-      const messageKeyPath = props.messages?.[props.fieldId]?.[key]
-      return messageKeyPath ? props.localisation(messageKeyPath) : ''
+      const slotId = props.fieldId.split('.').pop()
+      const messageKeyPath = props.messages?.[slotId]?.[key]
+      return messageKeyPath ? t(messageKeyPath) : ''
     }
     // TODO: move modelValidate and modelUpdate to a separate file to simplify testing
 
     // Define the event handler outside the render function save memory
     // differentiate if it is triggered from validateAll(no value) use vModel else use the value
-    const modelValidate = async value => {
-      // console.log('modelValidate', value)
-      // console.log('vModel.value', vModel.value)
+    const validate = async (value = vModel.value) => {
       // TODO: throw error via valibot
       for (const [validationName, validation] of Object.entries(props.validate)) {
-        const response = await validation(value || vModel.value)
+        const response = await validation(value, props.formState)
 
         if (!response || (typeof response === 'object' && response.result === false)) {
           inputState.state = response?.type || 'error'
-          inputState.text = _getErrorMessage(validationName) || response?.message || validationName
-          emit('validated', false)
+          inputState.text =
+            _getErrorMessage(validationName) || response?.message || t('error.common.general')
           return false
         }
         // if validation is successful reset the input state
         resetInputState()
-        emit('validated', true)
       }
       return true
+    }
+    const modelValidate = async (value = vModel.value) => {
+      // TODO: throw error via valibot
+      const validResult = await validate(value)
+      emit('validated', validResult)
+      return validResult
     }
 
     // https://vuejs.org/api/composition-api-setup.html#usage-with-render-functions
     expose({
-      modelValidate
+      validate,
+      modelValidate, // maybe make this private
+      vModel,
+      inputState
     })
     const modelUpdate = async value => {
       // switch on dispatch type only necessary when we have more of these cases, if so abstract it too
@@ -153,7 +161,6 @@ export default defineComponent({
       // do it here, so props are refreshed
       // i am reusing the same FormInput, which does not update the props
       //  This checks whether incoming props are present before setting
-      // i need this to run always, but this is only running for a new component
       const restProps = Object.entries(props).reduce((obj, [key, value]) => {
         if (formGroupPropsKeys.includes(key)) {
           formGroupProps[key] = value
@@ -164,10 +171,14 @@ export default defineComponent({
       }, {})
 
       const slotContent = slots.default({})
-      // this log is to check if i get rerendered when vModel is updated
-      // console.log(slotContent, 'slotContent')
+      const {
+        message = true,
+        class: inputClass = '',
+        size = 'xl',
+        ...inputProps
+      } = restProps.inputProps || {}
       slotContent[0].props = {
-        ...restProps,
+        ...inputProps, // except for class and size and hideInputState
         modelValue: vModel.value,
         // validateOn usually the same as updateOn, don't pass it if explicitly passed then follow
         [validateOn.value]: modelValidate,
@@ -182,7 +193,9 @@ export default defineComponent({
         {
           fieldId: props.fieldId,
           inputState: inputState.state,
-          messageText: inputState.text,
+          messageText: message ? inputState.text : '',
+          class: inputClass, // maybe it
+          size, // otherwise fallback to default
           ...formGroupProps
         },
         {
