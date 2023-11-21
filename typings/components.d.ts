@@ -7,23 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    DescriptionItem: typeof import('./../src/components/design-system/DescriptionItem.vue')['default']
-    DocumentUploader: typeof import('./../src/components/uploader/DocumentUploader.ts')['default']
-    'DocumentUploader.spec': typeof import('./../src/components/uploader/DocumentUploader.spec.ts')['default']
     FormHeader: typeof import('./../src/components/header/FormHeader.vue')['default']
     FormList: typeof import('./../src/components/core/FormList.ts')['default']
-    GetUploadError: typeof import('./../src/components/uploader/getUploadError.ts')['default']
-    InputAutoSuggest: typeof import('./../src/components/design-system/InputAutoSuggest.ts')['default']
-    InputAutoSuggestDynamic: typeof import('./../src/components/design-system/InputAutoSuggestDynamic.ts')['default']
-    InputCheckboxButton: typeof import('./../src/components/design-system/InputCheckboxButton.ts')['default']
-    InputDate: typeof import('./../src/components/design-system/InputDate.ts')['default']
-    InputDateMonth: typeof import('./../src/components/design-system/InputDateMonth.ts')['default']
-    InputEmail: typeof import('./../src/components/design-system/InputEmail.ts')['default']
-    InputNumber: typeof import('./../src/components/design-system/InputNumber.ts')['default']
-    InputRadio: typeof import('./../src/components/design-system/InputRadio.ts')['default']
-    InputSelect: typeof import('./../src/components/design-system/InputSelect.ts')['default']
-    InputText: typeof import('./../src/components/design-system/InputText.ts')['default']
-    InputTextArea: typeof import('./../src/components/design-system/InputTextArea.ts')['default']
-    SchemaTable: typeof import('./../src/components/design-system/SchemaTable.ts')['default']
   }
 }
